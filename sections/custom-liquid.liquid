@@ -1,0 +1,40 @@
+<section class="custom-liquid">
+  <div class="custom-liquid__inner">
+    {{ section.settings.custom_liquid }}
+    {% content_for 'blocks' %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .custom-liquid {
+    padding-block: 2rem;
+  }
+
+  .custom-liquid__inner {
+    display: grid;
+    gap: 1rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Custom Liquid",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "Custom Liquid"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Liquid"
+    }
+  ]
+}
+{% endschema %}

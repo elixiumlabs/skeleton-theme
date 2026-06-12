@@ -86,13 +86,13 @@
           <input type="submit" value="{{ 'cart.update' | t }}">
           <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
         </div>
-        {% if additional_checkout_buttons %}
-          <div class="cart-summary__accelerated">
-            {{ content_for_additional_checkout_buttons }}
-          </div>
-        {% endif %}
       </aside>
     </form>
+    {% if additional_checkout_buttons %}
+      <div class="cart-summary__accelerated">
+        {{ content_for_additional_checkout_buttons }}
+      </div>
+    {% endif %}
   {% else %}
     <div class="cart-empty">
       <h2>{{ section.settings.empty_heading }}</h2>

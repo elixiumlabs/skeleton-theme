@@ -3,6 +3,12 @@
     {% for block in section.blocks %}
       <article class="slideshow__slide" {{ block.shopify_attributes }}>
         {% if block.settings.image %}
+          {% liquid
+            assign slide_focal = ''
+            if block.settings.image.presentation.focal_point
+              assign slide_focal = 'object-position: ' | append: block.settings.image.presentation.focal_point | append: ';'
+            endif
+          %}
           {{
             block.settings.image
             | image_url: width: 2200
@@ -11,6 +17,7 @@
               widths: '750, 1100, 1500, 2200',
               sizes: '100vw',
               loading: 'lazy',
+              style: slide_focal,
               alt: block.settings.heading
           }}
         {% else %}

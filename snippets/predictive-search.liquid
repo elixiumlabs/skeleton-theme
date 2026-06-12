@@ -1,0 +1,47 @@
+<script>
+  (() => {
+    const inputs = document.querySelectorAll('input[predictive-search]');
+    inputs.forEach((input) => {
+      const panel = document.createElement('div');
+      panel.className = 'predictive-search';
+      panel.hidden = true;
+      input.insertAdjacentElement('afterend', panel);
+
+      let controller;
+      input.addEventListener('input', async () => {
+        const query = input.value.trim();
+        if (controller) controller.abort();
+        if (query.length < 2) {
+          panel.hidden = true;
+          panel.replaceChildren();
+          return;
+        }
+
+        controller = new AbortController();
+        const url = `/search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product,article,page&resources[limit]=6`;
+        let data;
+        try {
+          const response = await fetch(url, { signal: controller.signal });
+          data = await response.json();
+        } catch (error) {
+          if (error.name !== 'AbortError') panel.hidden = true;
+          return;
+        }
+        const results = [
+          ...(data.resources.results.products || []),
+          ...(data.resources.results.articles || []),
+          ...(data.resources.results.pages || [])
+        ];
+
+        panel.replaceChildren();
+        results.forEach((result) => {
+          const link = document.createElement('a');
+          link.href = result.url;
+          link.textContent = result.title;
+          panel.append(link);
+        });
+        panel.hidden = results.length === 0;
+      });
+    });
+  })();
+</script>

@@ -8,6 +8,12 @@
     {% for block in section.blocks %}
       <article class="lookbook__item" {{ block.shopify_attributes }}>
         {% if block.settings.image %}
+          {% liquid
+            assign look_focal = ''
+            if block.settings.image.presentation.focal_point
+              assign look_focal = 'object-position: ' | append: block.settings.image.presentation.focal_point | append: ';'
+            endif
+          %}
           {{
             block.settings.image
             | image_url: width: 1200
@@ -16,6 +22,7 @@
               widths: '480, 760, 1000, 1200',
               sizes: '(min-width: 990px) 33vw, 100vw',
               loading: 'lazy',
+              style: look_focal,
               alt: block.settings.heading
           }}
         {% else %}

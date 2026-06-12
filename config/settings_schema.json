@@ -82,9 +82,21 @@
       },
       {
         "type": "color",
+        "id": "accent_foreground_color",
+        "default": "#080607",
+        "label": "Accent foreground"
+      },
+      {
+        "type": "color",
         "id": "accent_soft_color",
         "default": "#FBE4EC",
         "label": "Soft accent"
+      },
+      {
+        "type": "color",
+        "id": "accent_soft_foreground_color",
+        "default": "#080607",
+        "label": "Soft accent foreground"
       },
       {
         "type": "range",

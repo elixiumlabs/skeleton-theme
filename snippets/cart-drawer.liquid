@@ -24,6 +24,17 @@
             <div>
               <a href="{{ item.url }}">{{ item.product.title }}</a>
               <p>{{ item.quantity }} x {{ item.final_price | money }}</p>
+              {% if item.selling_plan_allocation %}
+                <p>{{ item.selling_plan_allocation.selling_plan.name }}</p>
+              {% endif %}
+              {% render 'unit-price', variant: item.variant %}
+              {% if item.line_level_discount_allocations.size > 0 %}
+                <ul class="cart-drawer__discounts">
+                  {% for discount in item.line_level_discount_allocations %}
+                    <li>{{ discount.discount_application.title }} (-{{ discount.amount | money }})</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
               <a href="{{ item.url_to_remove }}">Remove</a>
             </div>
           </div>
@@ -37,10 +48,22 @@
         <span>Subtotal</span>
         <span class="price">{{ cart.total_price | money }}</span>
       </div>
+      {% if cart.cart_level_discount_applications.size > 0 %}
+        <div class="cart-drawer__discounts">
+          {% for discount in cart.cart_level_discount_applications %}
+            <p>{{ discount.title }} -{{ discount.total_allocated_amount | money }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
 
       <input type="submit" value="Update cart">
       <input type="submit" name="checkout" value="Checkout">
     </form>
+    {% if additional_checkout_buttons %}
+      <div class="cart-drawer__accelerated">
+        {{ content_for_additional_checkout_buttons }}
+      </div>
+    {% endif %}
   {% else %}
     <div class="cart-drawer__empty">
       <h2>Your lash wardrobe is empty.</h2>

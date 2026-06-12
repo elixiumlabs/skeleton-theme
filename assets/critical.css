@@ -91,14 +91,14 @@ a {
   text-underline-offset: 0.18em;
 }
 
-button:not(.shopify-payment-button__button),
+button[type='submit']:not(.shopify-payment-button__button),
 input,
 select,
 textarea {
   color: var(--color-foreground);
 }
 
-button:not(.shopify-payment-button__button),
+button[type='submit']:not(.shopify-payment-button__button),
 input[type='submit'],
 .button {
   align-items: center;
@@ -120,7 +120,7 @@ input[type='submit'],
   transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
 }
 
-button:not(.shopify-payment-button__button):hover,
+button[type='submit']:not(.shopify-payment-button__button):hover,
 input[type='submit']:hover,
 .button:hover {
   background: var(--color-accent);
@@ -181,6 +181,39 @@ h4 {
   font-size: 0.82rem;
   font-weight: 400;
   margin-top: 0.2rem;
+}
+
+.predictive-search {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1.25rem 3rem rgba(8, 6, 7, 0.14);
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.45rem;
+  position: absolute;
+  width: min(24rem, calc(100vw - 2rem));
+  z-index: 12;
+}
+
+form:has(input[predictive-search]) {
+  position: relative;
+}
+
+.predictive-search[hidden] {
+  display: none;
+}
+
+.predictive-search a {
+  font-family: var(--font-secondary--family);
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 0.7rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.predictive-search a:hover {
+  background: var(--color-accent-soft);
 }
 
 .visually-hidden {

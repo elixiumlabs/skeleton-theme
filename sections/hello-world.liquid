@@ -1,6 +1,10 @@
 {% liquid
   assign featured_collection = section.settings.featured_collection
   assign hero_image = section.settings.hero_image
+  assign hero_focal = ''
+  if hero_image.presentation.focal_point
+    assign hero_focal = 'object-position: ' | append: hero_image.presentation.focal_point | append: ';'
+  endif
 %}
 
 <section class="lash-home full-width">
@@ -15,6 +19,7 @@
           sizes: '100vw',
           loading: 'eager',
           fetchpriority: 'high',
+          style: hero_focal,
           alt: section.settings.heading
       }}
     {% else %}

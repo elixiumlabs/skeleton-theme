@@ -30,6 +30,46 @@
     {% else %}
       <p class="search-page__status">{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
 
+      <form class="search-page__filters" method="get">
+        <input type="hidden" name="q" value="{{ search.terms | escape }}">
+        <input type="hidden" name="type" value="product,article,page">
+        <input type="hidden" name="options[prefix]" value="last">
+        {% for filter in search.filters %}
+          <details class="search-filter">
+            <summary>{{ filter.label }}</summary>
+            <div class="search-filter__values">
+              {% case filter.type %}
+                {% when 'price_range' %}
+                  <label>
+                    <span>Min</span>
+                    <input name="{{ filter.min_value.param_name }}" type="number" min="0" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}">
+                  </label>
+                  <label>
+                    <span>Max</span>
+                    <input name="{{ filter.max_value.param_name }}" type="number" min="0" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}">
+                  </label>
+                {% else %}
+                  {% for value in filter.values %}
+                    <label class="search-filter__choice">
+                      <input
+                        type="checkbox"
+                        name="{{ value.param_name }}"
+                        value="{{ value.value }}"
+                        {% if value.active %}checked{% endif %}
+                        {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                      >
+                      <span>{{ value.label }} ({{ value.count }})</span>
+                    </label>
+                  {% endfor %}
+              {% endcase %}
+            </div>
+          </details>
+        {% endfor %}
+        {% if search.filters.size > 0 %}
+          <button type="submit">Apply filters</button>
+        {% endif %}
+      </form>
+
       <div class="search-results product-grid">
         {% paginate search.results by 20 %}
           {% for result in search.results %}
@@ -85,6 +125,56 @@
     margin-block: 1.5rem;
   }
 
+  .search-page__filters {
+    align-items: start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-block: 1.5rem;
+  }
+
+  .search-filter {
+    position: relative;
+  }
+
+  .search-filter summary {
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    display: inline-flex;
+    font-family: var(--font-secondary--family);
+    font-size: 0.78rem;
+    font-weight: 700;
+    list-style: none;
+    min-height: 3rem;
+    padding: 0.85rem 1rem;
+    text-transform: uppercase;
+  }
+
+  .search-filter summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .search-filter__values {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 1.25rem 3rem rgba(8, 6, 7, 0.14);
+    display: grid;
+    gap: 0.7rem;
+    left: 0;
+    min-width: 16rem;
+    padding: 1rem;
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    z-index: 6;
+  }
+
+  .search-filter__choice {
+    align-items: center;
+    display: flex;
+    gap: 0.55rem;
+    min-width: max-content;
+  }
+
   .search-results {
     margin-top: 2rem;
   }
@@ -121,6 +211,18 @@
   .search-results .page,
   .search-results .next {
     grid-column: 1 / -1;
+  }
+
+  @media (max-width: 700px) {
+    .search-filter,
+    .search-filter summary,
+    .search-page__filters button {
+      width: 100%;
+    }
+
+    .search-filter__values {
+      position: static;
+    }
   }
 {% endstylesheet %}
 

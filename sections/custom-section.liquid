@@ -1,7 +1,21 @@
 <div class="custom-section full-width">
   {% if section.settings.background_image %}
+    {% liquid
+      assign background_focal = ''
+      if section.settings.background_image.presentation.focal_point
+        assign background_focal = 'object-position: ' | append: section.settings.background_image.presentation.focal_point | append: ';'
+      endif
+    %}
     <div class="custom-section__background">
-      {{ section.settings.background_image | image_url: width: 2000 | image_tag }}
+      {{
+        section.settings.background_image
+        | image_url: width: 2000
+        | image_tag:
+          widths: '750, 1100, 1500, 2000',
+          sizes: '100vw',
+          style: background_focal,
+          loading: 'lazy'
+      }}
     </div>
   {% endif %}
 

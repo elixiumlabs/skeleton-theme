@@ -1,0 +1,95 @@
+<section class="customer-page">
+  <div class="customer-page__header">
+    <p class="eyebrow">Account</p>
+    <h1>{{ customer.name | default: customer.email }}</h1>
+    <a href="{{ routes.account_logout_url }}">Sign out</a>
+  </div>
+
+  <div class="customer-page__grid">
+    <div>
+      <h2>Orders</h2>
+      {% paginate customer.orders by 20 %}
+        {% if customer.orders.size > 0 %}
+          <div class="customer-page__orders">
+            {% for order in customer.orders %}
+              <a href="{{ order.customer_url }}">
+                <span>{{ order.name }}</span>
+                <span>{{ order.created_at | date: format: 'abbreviated_date' }}</span>
+                <span>{{ order.total_price | money }}</span>
+              </a>
+            {% endfor %}
+          </div>
+          {{ paginate | default_pagination }}
+        {% else %}
+          <p>No orders yet.</p>
+        {% endif %}
+      {% endpaginate %}
+    </div>
+
+    <aside>
+      <h2>Default address</h2>
+      {% if customer.default_address %}
+        {{ customer.default_address | format_address }}
+      {% else %}
+        <p>No default address saved.</p>
+      {% endif %}
+    </aside>
+  </div>
+</section>
+
+{% style %}
+  .customer-page {
+    padding-block: 3rem 4rem;
+  }
+
+  .customer-page__header {
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .customer-page h1 {
+    font-size: clamp(2.4rem, 5vw, 5rem);
+    margin-top: 0.7rem;
+    text-transform: uppercase;
+  }
+
+  .customer-page__grid {
+    align-items: start;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 24rem);
+  }
+
+  .customer-page h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  .customer-page__orders {
+    display: grid;
+    gap: 1px;
+  }
+
+  .customer-page__orders a {
+    border: 1px solid var(--color-border);
+    display: grid;
+    gap: 0.6rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 1rem;
+    text-decoration: none;
+  }
+
+  .customer-page aside {
+    background: var(--color-accent-soft);
+    padding: 1.25rem;
+  }
+
+  @media (max-width: 800px) {
+    .customer-page__grid,
+    .customer-page__orders a {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstyle %}

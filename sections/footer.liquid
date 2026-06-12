@@ -11,6 +11,49 @@
       {% endfor %}
     </div>
 
+    <div class="site-footer__newsletter">
+      <p class="eyebrow">{{ section.settings.newsletter_eyebrow }}</p>
+      <h2>{{ section.settings.newsletter_heading }}</h2>
+      {% form 'customer' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <label for="NewsletterEmail-{{ section.id }}" class="visually-hidden">Email address</label>
+        <input id="NewsletterEmail-{{ section.id }}" type="email" name="contact[email]" placeholder="Email address" required>
+        <button type="submit">Join</button>
+      {% endform %}
+    </div>
+
+    <div class="site-footer__markets">
+      {% if localization.available_countries.size > 1 %}
+        {% form 'localization', class: 'site-footer__localization' %}
+          <label for="FooterCountry-{{ section.id }}">Country/region</label>
+          <select id="FooterCountry-{{ section.id }}" name="country_code" onchange="this.form.submit()">
+            {% for country in localization.available_countries %}
+              <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
+                {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+              </option>
+            {% endfor %}
+          </select>
+        {% endform %}
+      {% endif %}
+
+      {% if localization.available_languages.size > 1 %}
+        {% form 'localization', class: 'site-footer__localization' %}
+          <label for="FooterLanguage-{{ section.id }}">Language</label>
+          <select id="FooterLanguage-{{ section.id }}" name="locale_code" onchange="this.form.submit()">
+            {% for language in localization.available_languages %}
+              <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>
+                {{ language.endonym_name | capitalize }}
+              </option>
+            {% endfor %}
+          </select>
+        {% endform %}
+      {% endif %}
+    </div>
+
+    <div class="site-footer__shop-follow">
+      {{ shop | login_button: action: 'follow' }}
+    </div>
+
     <div class="site-footer__payment">
       {% if section.settings.show_payment_icons %}
         {% for type in shop.enabled_payment_types %}
@@ -40,7 +83,7 @@
     display: grid;
     gap: 2rem;
     grid-column: 2;
-    grid-template-columns: minmax(14rem, 1fr) auto minmax(10rem, auto);
+    grid-template-columns: minmax(14rem, 1fr) minmax(12rem, auto) minmax(18rem, 0.8fr);
   }
 
   .site-footer a {
@@ -65,10 +108,59 @@
   }
 
   .site-footer__links,
-  .site-footer__payment {
+  .site-footer__payment,
+  .site-footer__markets {
     display: flex;
     flex-wrap: wrap;
     gap: 0.8rem 1rem;
+  }
+
+  .site-footer__newsletter {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .site-footer__newsletter h2 {
+    font-size: 1.25rem;
+    text-transform: uppercase;
+  }
+
+  .site-footer__newsletter form {
+    display: grid;
+    gap: 0.6rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .site-footer__newsletter input {
+    background: color-mix(in srgb, #ffffff 8%, transparent);
+    border-color: color-mix(in srgb, #ffffff 18%, transparent);
+    color: #ffffff;
+  }
+
+  .site-footer__markets,
+  .site-footer__shop-follow,
+  .site-footer__payment,
+  .site-footer__copyright {
+    grid-column: 1 / -1;
+  }
+
+  .site-footer__localization {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .site-footer__localization label {
+    color: color-mix(in srgb, #ffffff 70%, transparent);
+    font-family: var(--font-secondary--family);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .site-footer__localization select {
+    background: color-mix(in srgb, #ffffff 8%, transparent);
+    border-color: color-mix(in srgb, #ffffff 18%, transparent);
+    color: #ffffff;
   }
 
   .site-footer__links a {
@@ -115,7 +207,20 @@
     {
       "type": "link_list",
       "id": "menu",
-      "label": "t:labels.menu"
+      "label": "t:labels.menu",
+      "default": "footer"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_eyebrow",
+      "label": "Newsletter eyebrow",
+      "default": "The list"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter heading",
+      "default": "Private drops and lash rituals"
     },
     {
       "type": "checkbox",
