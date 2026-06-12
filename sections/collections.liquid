@@ -5,7 +5,10 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
 
-<h1>{{ 'collections.title' | t }}</h1>
+<div class="collections-header">
+  <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+  <h1>{{ 'collections.title' | t }}</h1>
+</div>
 
 <div
   class="collections {{ section.settings.grid_item_width }}"
@@ -35,6 +38,18 @@
 </div>
 
 {% stylesheet %}
+  .collections-header {
+    border-bottom: 1px solid var(--color-border);
+    margin-block: 3rem 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .collections-header h1 {
+    font-size: clamp(2.6rem, 6vw, 6rem);
+    margin-top: 0.7rem;
+    text-transform: uppercase;
+  }
+
   .collections {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(var(--collection-card-size), 100%), 1fr));
@@ -47,9 +62,34 @@
     --collection-card-size: 280px;
   }
   .collection-card {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground);
     display: flex;
     flex-direction: column;
+    text-decoration: none;
     width: 100%;
+  }
+
+  .collection-card__image {
+    aspect-ratio: 1;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .collection-card__content {
+    padding: 1rem;
+  }
+
+  .collection-card__content p:first-child {
+    font-family: var(--font-secondary--family);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .collection-card__content p + p {
+    color: var(--color-muted);
+    margin-top: 0.65rem;
   }
 {% endstylesheet %}
 
@@ -57,6 +97,12 @@
 {
   "name": "t:general.collections_grid",
   "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Shop the wardrobe"
+    },
     {
       "type": "select",
       "id": "grid_item_width",

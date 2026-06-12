@@ -1,37 +1,294 @@
-{% comment %}
-  This section is used in the cart template to render /cart page with an
-  overview of the items in customer's cart.
+<section class="cart-page">
+  <div class="cart-page__header">
+    <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+    <h1>{{ 'cart.title' | t }}</h1>
+  </div>
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
-{% endcomment %}
+  {% if cart.item_count > 0 %}
+    <form class="cart-form" action="{{ routes.cart_url }}" method="post">
+      <div class="cart-items">
+        {% for item in cart.items %}
+          <div class="cart-item">
+            <a class="cart-item__media" href="{{ item.url }}">
+              {% if item.image %}
+                {{
+                  item.image
+                  | image_url: width: 320, height: 400, crop: 'center'
+                  | image_tag:
+                    class: 'cart-item__image',
+                    widths: '160, 240, 320',
+                    sizes: '9rem',
+                    loading: 'lazy',
+                    alt: item.product.title
+                }}
+              {% endif %}
+            </a>
 
-<h1>{{ 'cart.title' | t }}</h1>
+            <div class="cart-item__content">
+              <a href="{{ item.url }}">{{ item.product.title }}</a>
+              {% unless item.product.has_only_default_variant %}
+                <p>{{ item.variant.title }}</p>
+              {% endunless %}
+              <a class="cart-item__remove" href="{{ item.url_to_remove }}">{{ 'cart.remove' | t }}</a>
+            </div>
 
-<form action="{{ routes.cart_url }}" method="post">
-  <table>
-    {% for item in cart.items %}
-      <tr>
-        <td>
-          {% render 'image', image: item.image, url: item.url %}
-        </td>
-        <td>
-          <p>{{ item.product.title }}</p>
-          {{ 'cart.remove' | t | link_to: item.url_to_remove }}
-        </td>
-        <td>
-          <input type="text" name="updates[]" value="{{ item.quantity }}">
+            <div class="cart-item__controls">
+              <label for="Quantity-{{ item.index | plus: 1 }}" class="visually-hidden">Quantity</label>
+              <input
+                id="Quantity-{{ item.index | plus: 1 }}"
+                type="number"
+                name="updates[]"
+                value="{{ item.quantity }}"
+                min="0"
+              >
+              <p class="price">{{ item.final_line_price | money }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <aside class="cart-summary">
+        <p>{{ section.settings.summary_label }}</p>
+        <label for="CartNote">{{ section.settings.note_label }}</label>
+        <textarea id="CartNote" name="note" rows="5" placeholder="{{ section.settings.note_placeholder }}">{{ cart.note }}</textarea>
+        <div class="cart-summary__total">
+          <span>Subtotal</span>
+          <span class="price">{{ cart.total_price | money }}</span>
+        </div>
+        <p>{{ section.settings.checkout_note }}</p>
+        <div class="cart-summary__actions">
           <input type="submit" value="{{ 'cart.update' | t }}">
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
+          <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
+        </div>
+      </aside>
+    </form>
+  {% else %}
+    <div class="cart-empty">
+      <h2>{{ section.settings.empty_heading }}</h2>
+      <p>{{ section.settings.empty_copy }}</p>
+      <a class="button" href="{{ routes.all_products_collection_url }}">{{ section.settings.empty_button }}</a>
+    </div>
+  {% endif %}
+</section>
 
-  <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
-</form>
+{% stylesheet %}
+  .cart-page {
+    padding-block: 3rem 4rem;
+  }
+
+  .cart-page__header {
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .cart-page h1 {
+    font-size: clamp(2.6rem, 6vw, 6rem);
+    margin-top: 0.7rem;
+    text-transform: uppercase;
+  }
+
+  .cart-form {
+    align-items: start;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+  }
+
+  .cart-items {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .cart-item {
+    align-items: center;
+    border: 1px solid var(--color-border);
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 8rem minmax(0, 1fr) minmax(7rem, auto);
+    padding: 1rem;
+  }
+
+  .cart-item__media {
+    aspect-ratio: 4 / 5;
+    background: var(--color-accent-soft);
+    display: block;
+    overflow: hidden;
+  }
+
+  .cart-item__image {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .cart-item__content > a:first-child {
+    font-family: var(--font-secondary--family);
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .cart-item__content p {
+    color: var(--color-muted);
+    margin-top: 0.35rem;
+  }
+
+  .cart-item__remove {
+    color: var(--color-muted);
+    display: inline-flex;
+    font-size: 0.82rem;
+    margin-top: 0.8rem;
+  }
+
+  .cart-item__controls {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: end;
+  }
+
+  .cart-item__controls input {
+    max-width: 5.5rem;
+  }
+
+  .cart-summary {
+    background: #080607;
+    color: #ffffff;
+    display: grid;
+    gap: 1rem;
+    padding: 1.25rem;
+    position: sticky;
+    top: 1rem;
+  }
+
+  .cart-summary > p {
+    color: color-mix(in srgb, #ffffff 72%, transparent);
+  }
+
+  .cart-summary label {
+    font-family: var(--font-secondary--family);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .cart-summary textarea {
+    background: color-mix(in srgb, #ffffff 8%, transparent);
+    border-color: color-mix(in srgb, #ffffff 20%, transparent);
+    color: #ffffff;
+  }
+
+  .cart-summary__total {
+    align-items: center;
+    border-block: 1px solid color-mix(in srgb, #ffffff 18%, transparent);
+    display: flex;
+    justify-content: space-between;
+    padding-block: 1rem;
+  }
+
+  .cart-summary__actions {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .cart-summary input[name='checkout'] {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-foreground);
+  }
+
+  .cart-empty {
+    background: var(--color-accent-soft);
+    padding: 3rem;
+  }
+
+  .cart-empty h2 {
+    font-size: clamp(2rem, 4vw, 4rem);
+    text-transform: uppercase;
+  }
+
+  .cart-empty p {
+    color: var(--color-muted);
+    margin-block: 1rem 1.5rem;
+    max-width: 38rem;
+  }
+
+  @media (max-width: 900px) {
+    .cart-form {
+      grid-template-columns: 1fr;
+    }
+
+    .cart-summary {
+      position: static;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .cart-item {
+      align-items: start;
+      grid-template-columns: 6.5rem minmax(0, 1fr);
+    }
+
+    .cart-item__controls {
+      grid-column: 1 / -1;
+      grid-template-columns: auto 1fr;
+      justify-items: start;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.cart",
-  "settings": []
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Your selection"
+    },
+    {
+      "type": "text",
+      "id": "summary_label",
+      "label": "Summary label",
+      "default": "Order summary"
+    },
+    {
+      "type": "text",
+      "id": "checkout_note",
+      "label": "Checkout note",
+      "default": "Shipping and discount codes are calculated at checkout."
+    },
+    {
+      "type": "text",
+      "id": "note_label",
+      "label": "Cart note label",
+      "default": "Gift note or delivery request"
+    },
+    {
+      "type": "text",
+      "id": "note_placeholder",
+      "label": "Cart note placeholder",
+      "default": "Add a note for your order"
+    },
+    {
+      "type": "text",
+      "id": "empty_heading",
+      "label": "Empty heading",
+      "default": "Your lash wardrobe is empty."
+    },
+    {
+      "type": "textarea",
+      "id": "empty_copy",
+      "label": "Empty copy",
+      "default": "Start with a soft everyday lash or build an after-dark set."
+    },
+    {
+      "type": "text",
+      "id": "empty_button",
+      "label": "Empty button",
+      "default": "Shop lashes"
+    }
+  ]
 }
 {% endschema %}

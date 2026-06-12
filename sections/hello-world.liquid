@@ -1,143 +1,424 @@
-{% comment %}
-  Welcome to Shopify theme development!
-{% endcomment %}
+{% liquid
+  assign featured_collection = section.settings.featured_collection
+  assign hero_image = section.settings.hero_image
+%}
 
-<div class="welcome full-width">
-  <div class="welcome-content">
+<section class="lash-home full-width">
+  <div class="lash-hero">
+    {% if hero_image != blank %}
+      {{
+        hero_image
+        | image_url: width: 2200
+        | image_tag:
+          class: 'lash-hero__image',
+          widths: '750, 1100, 1500, 2200',
+          sizes: '100vw',
+          loading: 'eager',
+          fetchpriority: 'high',
+          alt: section.settings.heading
+      }}
+    {% else %}
+      <img
+        class="lash-hero__image"
+        src="{{ 'lash-candii-hero.png' | asset_url }}"
+        alt="{{ section.settings.heading | escape }}"
+        width="1792"
+        height="1024"
+        loading="eager"
+        fetchpriority="high"
+      >
+    {% endif %}
+
+    <div class="lash-hero__overlay"></div>
+    <div class="lash-hero__content">
+      <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      <h1>{{ section.settings.heading }}</h1>
+      <p>{{ section.settings.copy }}</p>
+
+      <div class="lash-hero__actions">
+        <a class="button" href="{{ section.settings.primary_link | default: routes.all_products_collection_url }}">
+          {{ section.settings.primary_label }}
+        </a>
+        <a class="button button--secondary" href="{{ section.settings.secondary_link | default: '/pages/about' }}">
+          {{ section.settings.secondary_label }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lash-home__intro">
+    <p class="eyebrow">{{ section.settings.collection_eyebrow }}</p>
+    <h2>{{ section.settings.collection_heading }}</h2>
+    <p>{{ section.settings.collection_copy }}</p>
+  </div>
+
+  <div class="lash-products product-grid">
+    {% if featured_collection != blank and featured_collection.products_count > 0 %}
+      {% for product in featured_collection.products limit: 4 %}
+        {% render 'product-card', product: product %}
+      {% endfor %}
+    {% else %}
+      {% assign fallback_products = 'Classic Wisp,Velvet Volume,Baby Doll Lift,After Dark Luxe' | split: ',' %}
+      {% for item in fallback_products %}
+        <div class="lash-product lash-product--placeholder">
+          <span class="lash-product__media">
+            <span class="lash-product__placeholder"></span>
+          </span>
+          <span class="lash-product__content">
+            <span>{{ item }}</span>
+            <span class="price">$24.00</span>
+          </span>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <div class="lash-ritual">
     <div>
-      <h1>Hello, World!</h1>
-
-      <p class="welcome-description">
-        The Skeleton theme is a minimal, carefully structured Shopify theme designed to help you quickly get started.
-        Designed with modularity, maintainability, and Shopify's best practices in mind.
-      </p>
-
-      <p class="welcome-description">
-        Themes shape the online store experience for merchants and their customers. Build fast, flexible themes at scale
-        using Liquid, Shopify's theme templating language, along with HTML, CSS, JavaScript, and JSON.
-      </p>
+      <p class="eyebrow">{{ section.settings.ritual_eyebrow }}</p>
+      <h2>{{ section.settings.ritual_heading }}</h2>
     </div>
-    <div class="icon">
-      <img src="{{ 'shoppy-x-ray.svg' | asset_url }}" width="300" height="300">
+    <div class="lash-ritual__steps">
+      <div>
+        <span>01</span>
+        <p>{{ section.settings.ritual_step_1 }}</p>
+      </div>
+      <div>
+        <span>02</span>
+        <p>{{ section.settings.ritual_step_2 }}</p>
+      </div>
+      <div>
+        <span>03</span>
+        <p>{{ section.settings.ritual_step_3 }}</p>
+      </div>
     </div>
   </div>
-</div>
-
-<div class="highlights">
-  <div class="highlight">
-    <h3>Key Concepts</h3>
-    <p class="highlight-description">
-      Shopify themes are a package of template files, building blocks, and supporting assets. Use these building blocks
-      to create modular, customizable themes.
-    </p>
-    <p>{{ 'Learn more about key concepts' | link_to: 'https://shopify.dev/docs/storefronts/themes/architecture' }}</p>
-  </div>
-
-  <div class="highlight">
-    <h3>Liquid</h3>
-    <p class="highlight-description">
-      The Liquid templating language is the backbone of Shopify themes, and is used to load dynamic content on
-      storefronts. Extend Liquid objects to store and present custom data using metafields.
-    </p>
-    <p>{{ 'View the Liquid reference' | link_to: 'https://shopify.dev/docs/api/liquid' }}</p>
-  </div>
-
-  <div class="highlight">
-    <h3>Best Practices</h3>
-    <p class="highlight-description">
-      To optimize your theme development experience, Shopify has established a set of best practices that you can refer
-      to when developing your theme and setting up your toolchains and processes.
-    </p>
-    <p>{{ 'Follow best practices' | link_to: 'https://shopify.dev/docs/storefronts/themes/best-practices' }}</p>
-  </div>
-</div>
+</section>
 
 {% stylesheet %}
-  .welcome {
+  .lash-home {
+    background: var(--color-background);
     display: grid;
     grid-template-columns: var(--content-grid);
-    background-color: #f6f6f7;
-    padding: 72px 0;
   }
 
-  .welcome-content {
+  .lash-home > * {
     grid-column: 2;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
+  }
+
+  .lash-hero {
+    background: #080607;
+    color: #ffffff;
+    display: grid;
+    grid-column: 1 / -1;
+    min-height: clamp(36rem, 78svh, 52rem);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .lash-hero__image,
+  .lash-hero__overlay,
+  .lash-hero__content {
+    grid-area: 1 / 1;
+  }
+
+  .lash-hero__image {
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     width: 100%;
-    padding: 0 24px;
   }
 
-  .welcome-description {
-    max-width: 80ch;
-    line-height: 1.4;
-    margin-top: 1.5rem;
+  .lash-hero__overlay {
+    background:
+      linear-gradient(90deg, rgba(8, 6, 7, 0.92) 0%, rgba(8, 6, 7, 0.72) 34%, rgba(8, 6, 7, 0.08) 70%),
+      linear-gradient(0deg, rgba(8, 6, 7, 0.36), rgba(8, 6, 7, 0));
   }
 
-  .icon {
-    width: 300px;
+  .lash-hero__content {
+    align-content: center;
+    display: grid;
+    gap: 1.25rem;
+    max-width: min(43rem, calc(100% - var(--page-margin) * 2));
+    padding: 5rem var(--page-margin);
+    width: 100%;
   }
 
-  .highlights {
+  .lash-hero h1 {
+    font-size: clamp(3.1rem, 8vw, 7.5rem);
+    max-width: 8ch;
+    text-transform: uppercase;
+  }
+
+  .lash-hero__content > p:not(.eyebrow) {
+    color: color-mix(in srgb, #ffffff 78%, transparent);
+    font-size: 1.05rem;
+    max-width: 34rem;
+  }
+
+  .lash-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 0.75rem;
+  }
+
+  .lash-home__intro {
+    margin-block: 5rem 2rem;
+    max-width: 48rem;
+  }
+
+  .lash-home__intro h2,
+  .lash-ritual h2 {
+    font-size: clamp(2rem, 4vw, 4rem);
+    margin-top: 0.65rem;
+    text-transform: uppercase;
+  }
+
+  .lash-home__intro > p:not(.eyebrow) {
+    color: var(--color-muted);
+    margin-top: 1rem;
+    max-width: 40rem;
+  }
+
+  .lash-products {
+    display: grid;
+    gap: 1px;
+  }
+
+  .lash-product {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground);
+    display: grid;
+    min-width: 0;
+    text-decoration: none;
+  }
+
+  .lash-product__media {
+    aspect-ratio: 4 / 5;
+    background:
+      linear-gradient(145deg, rgba(244, 182, 200, 0.28), rgba(255, 255, 255, 0.82)),
+      #f7f1f3;
+    display: block;
+    overflow: hidden;
+  }
+
+  .lash-product__image {
+    height: 100%;
+    object-fit: cover;
+    transition: transform 260ms ease;
+    width: 100%;
+  }
+
+  .lash-product:hover .lash-product__image {
+    transform: scale(1.035);
+  }
+
+  .lash-product__placeholder {
+    background:
+      radial-gradient(circle at 50% 42%, rgba(8, 6, 7, 0.9) 0 0.18rem, transparent 0.2rem),
+      radial-gradient(ellipse at 50% 52%, transparent 0 3.4rem, rgba(8, 6, 7, 0.86) 3.45rem 3.55rem, transparent 3.6rem),
+      linear-gradient(145deg, rgba(244, 182, 200, 0.52), rgba(255, 255, 255, 0.82));
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+
+  .lash-product__content {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    min-height: 5rem;
+    padding: 1rem;
+  }
+
+  .lash-product__content span:first-child {
+    font-family: var(--font-secondary--family);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .lash-ritual {
+    align-items: start;
+    border-block: 1px solid var(--color-border);
     display: grid;
     gap: 2rem;
-    grid-template-columns: repeat(3, 1fr);
-    margin-top: 50px;
+    grid-template-columns: minmax(16rem, 0.75fr) 1fr;
+    margin-top: 5rem;
+    padding-block: 3rem;
   }
 
-  @media (max-width: 1100px) {
-    .highlights {
+  .lash-ritual__steps {
+    display: grid;
+    gap: 1px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .lash-ritual__steps div {
+    background: color-mix(in srgb, var(--color-accent-soft) 64%, #ffffff);
+    min-height: 11rem;
+    padding: 1.25rem;
+  }
+
+  .lash-ritual__steps span {
+    color: var(--color-accent);
+    font-family: var(--font-secondary--family);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .lash-ritual__steps p {
+    font-family: var(--font-secondary--family);
+    font-size: clamp(1.1rem, 2vw, 1.55rem);
+    font-weight: 700;
+    line-height: 1.18;
+    margin-top: 1.25rem;
+  }
+
+  @media (max-width: 990px) {
+    .lash-ritual {
       grid-template-columns: 1fr;
     }
   }
 
-  .highlight {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 24px;
-    border-radius: 8px;
-    background-color: #eef3ff;
-    color: rgb(92, 95, 98);
-    line-height: 1.4;
-  }
+  @media (max-width: 640px) {
+    .lash-hero {
+      min-height: 42rem;
+    }
 
-  .highlight > * + * {
-    margin-top: 1rem;
-  }
+    .lash-hero__image {
+      object-position: 62% center;
+    }
 
-  .highlight h3 {
-    font-size: 1rem;
-    color: rgb(32, 34, 35);
-  }
+    .lash-hero__overlay {
+      background: linear-gradient(180deg, rgba(8, 6, 7, 0.9), rgba(8, 6, 7, 0.56) 55%, rgba(8, 6, 7, 0.16));
+    }
 
-  .highlight-description {
-    flex: 1 1;
-  }
+    .lash-hero__content {
+      align-content: start;
+      padding-top: 4rem;
+    }
 
-  .highlight a {
-    display: flex;
-    width: fit-content;
-    background-color: rgb(250, 251, 251);
-    box-shadow: rgba(0, 0, 0, 0.2) 0px -3px 0px 0px inset, rgba(255, 255, 255, 0.9) 0px 2px 0px 0px inset;
-    border: 1px solid rgb(140, 145, 150);
-    border-radius: 4px;
-    color: rgb(92, 95, 98);
-    padding: 3px 10px 5px;
-    text-decoration: none;
+    .lash-hero h1 {
+      font-size: 3.35rem;
+    }
+
+    .lash-ritual__steps {
+      grid-template-columns: 1fr;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Hello World",
-  "settings": [],
+  "name": "Luxury lash homepage",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Hero eyebrow",
+      "default": "Luxury lash essentials"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Hero heading",
+      "default": "Lash Candii"
+    },
+    {
+      "type": "textarea",
+      "id": "copy",
+      "label": "Hero copy",
+      "default": "Featherlight strip lashes made for soft glam, clean lines, and a polished finish that photographs beautifully."
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Shop lashes"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Explore rituals"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Featured collection"
+    },
+    {
+      "type": "text",
+      "id": "collection_eyebrow",
+      "label": "Collection eyebrow",
+      "default": "The edit"
+    },
+    {
+      "type": "text",
+      "id": "collection_heading",
+      "label": "Collection heading",
+      "default": "Soft drama, sculpted by hand."
+    },
+    {
+      "type": "textarea",
+      "id": "collection_copy",
+      "label": "Collection copy",
+      "default": "Curated lash styles for lifted everyday glamour, bridal polish, and after-dark volume."
+    },
+    {
+      "type": "text",
+      "id": "ritual_eyebrow",
+      "label": "Ritual eyebrow",
+      "default": "Lash ritual"
+    },
+    {
+      "type": "text",
+      "id": "ritual_heading",
+      "label": "Ritual heading",
+      "default": "Designed for a seamless finish."
+    },
+    {
+      "type": "text",
+      "id": "ritual_step_1",
+      "label": "Step 1",
+      "default": "Measure and trim from the outer corner for a custom fit."
+    },
+    {
+      "type": "text",
+      "id": "ritual_step_2",
+      "label": "Step 2",
+      "default": "Let adhesive turn tacky before pressing along the lash line."
+    },
+    {
+      "type": "text",
+      "id": "ritual_step_3",
+      "label": "Step 3",
+      "default": "Lift, blend, and store the lash back in its tray."
+    }
+  ],
   "presets": [
     {
-      "name": "Hello World Template",
-      "category": "Demo"
+      "name": "Luxury lash homepage",
+      "category": "Image"
     }
   ]
 }

@@ -1,0 +1,135 @@
+<section class="recently-viewed" data-recently-viewed>
+  <div class="recently-viewed__header">
+    <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2>{{ section.settings.heading }}</h2>
+  </div>
+  <div class="recently-viewed__grid" data-recently-viewed-grid></div>
+</section>
+
+<script>
+  (() => {
+    const key = 'lashCandiiRecentlyViewed';
+    const current = {
+      title: {{ product.title | json }},
+      url: {{ product.url | json }},
+      image: {% if product.featured_image %}{{ product.featured_image | image_url: width: 520, height: 650, crop: 'center' | json }}{% else %}null{% endif %},
+      price: {{ product.price | money | json }}
+    };
+    const stored = JSON.parse(localStorage.getItem(key) || '[]').filter((item) => item.url !== current.url);
+    const items = [current, ...stored].slice(0, {{ section.settings.limit }});
+    localStorage.setItem(key, JSON.stringify(items));
+
+    const grid = document.querySelector('[data-recently-viewed-grid]');
+    if (!grid) return;
+    stored.slice(0, {{ section.settings.limit }}).forEach((item) => {
+      const card = document.createElement('a');
+      card.className = 'recently-viewed__card';
+      card.href = item.url;
+      card.innerHTML = `
+        ${item.image ? `<img src="${item.image}" alt="${item.title}">` : '<span></span>'}
+        <strong>${item.title}</strong>
+        <small>${item.price}</small>
+      `;
+      grid.append(card);
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .recently-viewed {
+    border-top: 1px solid var(--color-border);
+    display: grid;
+    gap: 2rem;
+    padding-block: 3rem 4rem;
+  }
+
+  .recently-viewed__header h2 {
+    font-size: clamp(2rem, 4vw, 4rem);
+    margin-top: 0.65rem;
+    text-transform: uppercase;
+  }
+
+  .recently-viewed__grid {
+    display: grid;
+    gap: 1px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .recently-viewed__card {
+    border: 1px solid var(--color-border);
+    display: grid;
+    gap: 0.55rem;
+    padding-bottom: 1rem;
+    text-decoration: none;
+  }
+
+  .recently-viewed__card img,
+  .recently-viewed__card span {
+    aspect-ratio: 4 / 5;
+    background: var(--color-accent-soft);
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .recently-viewed__card strong,
+  .recently-viewed__card small {
+    padding-inline: 1rem;
+  }
+
+  .recently-viewed__card strong {
+    font-family: var(--font-secondary--family);
+    text-transform: uppercase;
+  }
+
+  .recently-viewed__card small {
+    color: var(--color-accent);
+    font-family: var(--font-secondary--family);
+    font-weight: 700;
+  }
+
+  @media (max-width: 990px) {
+    .recently-viewed__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .recently-viewed__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Recently viewed",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Recently viewed"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Return to your shortlist"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Product limit",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recently viewed"
+    }
+  ]
+}
+{% endschema %}

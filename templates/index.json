@@ -9,12 +9,22 @@
  */
 {
   "sections": {
+    "promo": {
+      "type": "promo-banner",
+      "settings": {}
+    },
     "main": {
       "type": "hello-world",
+      "settings": {}
+    },
+    "press": {
+      "type": "press-coverage",
       "settings": {}
     }
   },
   "order": [
-    "main"
+    "promo",
+    "main",
+    "press"
   ]
 }

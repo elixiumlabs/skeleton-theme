@@ -1,0 +1,82 @@
+<product-recommendations
+  class="recommendations"
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.limit }}"
+>
+  {% if recommendations.performed and recommendations.products_count > 0 %}
+    <div class="recommendations__header">
+      <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2>{{ section.settings.heading }}</h2>
+    </div>
+
+    <div class="product-grid">
+      {% for recommendation in recommendations.products %}
+        {% render 'product-card', product: recommendation %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</product-recommendations>
+
+<script>
+  (() => {
+    document.querySelectorAll('product-recommendations[data-url]').forEach(async (element) => {
+      if (element.children.length) return;
+      const response = await fetch(element.dataset.url);
+      const html = await response.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const replacement = doc.querySelector('product-recommendations');
+      if (replacement && replacement.innerHTML.trim().length) element.innerHTML = replacement.innerHTML;
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .recommendations {
+    display: grid;
+    gap: 2rem;
+    padding-block: 3rem 4rem;
+  }
+
+  .recommendations__header {
+    max-width: 42rem;
+  }
+
+  .recommendations__header h2 {
+    font-size: clamp(2rem, 4vw, 4rem);
+    margin-top: 0.65rem;
+    text-transform: uppercase;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Recommended products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Complete the ritual"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Pairs beautifully with"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Product limit",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recommended products"
+    }
+  ]
+}
+{% endschema %}

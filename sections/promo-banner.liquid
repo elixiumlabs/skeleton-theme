@@ -1,0 +1,75 @@
+<section class="promo-banner full-width">
+  <div class="promo-banner__inner">
+    <p>{{ section.settings.text }}</p>
+    {% if section.settings.link_label != blank %}
+      <a href="{{ section.settings.link | default: routes.all_products_collection_url }}">{{ section.settings.link_label }}</a>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .promo-banner {
+    background: var(--color-foreground);
+    color: #ffffff;
+  }
+
+  .promo-banner__inner {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0.7rem var(--page-margin);
+    text-align: center;
+  }
+
+  .promo-banner p,
+  .promo-banner a {
+    font-family: var(--font-secondary--family);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .promo-banner a {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 620px) {
+    .promo-banner__inner {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Promo banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Free U.S. shipping on luxury lash orders over $75"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promo banner"
+    }
+  ]
+}
+{% endschema %}

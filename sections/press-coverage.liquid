@@ -1,0 +1,117 @@
+<section class="press-coverage">
+  <div class="press-coverage__header">
+    <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2>{{ section.settings.heading }}</h2>
+  </div>
+
+  <div class="press-coverage__grid">
+    {% for block in section.blocks %}
+      <article class="press-coverage__item" {{ block.shopify_attributes }}>
+        <p>{{ block.settings.quote }}</p>
+        <strong>{{ block.settings.source }}</strong>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .press-coverage {
+    display: grid;
+    gap: 2rem;
+    padding-block: 3rem 4rem;
+  }
+
+  .press-coverage__header h2 {
+    font-size: clamp(2rem, 4vw, 4rem);
+    margin-top: 0.65rem;
+    text-transform: uppercase;
+  }
+
+  .press-coverage__grid {
+    display: grid;
+    gap: 1px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .press-coverage__item {
+    background: var(--color-accent-soft);
+    display: grid;
+    min-height: 13rem;
+    padding: 1.25rem;
+  }
+
+  .press-coverage__item p {
+    font-family: var(--font-secondary--family);
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .press-coverage__item strong {
+    align-self: end;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 850px) {
+    .press-coverage__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Press coverage",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "As seen in"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The beauty edit approves"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "press",
+      "name": "Press item",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "\"A polished lash wardrobe for soft glam minimalists.\""
+        },
+        {
+          "type": "text",
+          "id": "source",
+          "label": "Source",
+          "default": "Beauty Journal"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Press coverage",
+      "blocks": [
+        {
+          "type": "press"
+        },
+        {
+          "type": "press"
+        },
+        {
+          "type": "press"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -6,63 +6,124 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/article
 {% endcomment %}
 
-{% if article.image %}
-  {{ article.image | image_url: width: 1000 | image_tag }}
-{% endif %}
+<article class="article-page">
+  {% if article.image %}
+    {{
+      article.image
+      | image_url: width: 1600, height: 900, crop: 'center'
+      | image_tag: class: 'article-page__image', loading: 'eager', alt: article.title
+    }}
+  {% endif %}
 
-<h1>{{ article.title }}</h1>
+  <div class="article-page__header">
+    <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+    <h1>{{ article.title }}</h1>
 
-{% assign date = article.published_at | time_tag: format: 'date' %}
-<p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
-
-{{ article.content }}
-
-{% if blog.comments_enabled? %}
-  <h2>{{ 'blog.article_comments' | t }}</h2>
-
-  <div id="comments">
-    {% paginate article.comments by 10 %}
-      {% for comment in article.comments %}
-        <div>
-          <p>{{ comment.author }}</p>
-          <p>
-            {{- comment.created_at | time_tag: format: 'date' -}}
-          </p>
-          <p>{{ comment.content }}</p>
-        </div>
-      {% endfor %}
-
-      {{ paginate | default_pagination: anchor: 'comments' }}
-    {% endpaginate %}
+    {% assign date = article.published_at | time_tag: format: 'date' %}
+    <p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
   </div>
 
-  {% form 'new_comment', article %}
-    <h2>{{ 'blog.comment_form_title' | t }}</h2>
+  <div class="article-page__body">
+    {{ article.content }}
+  </div>
 
-    {{ form.errors | default_errors }}
+  {% if blog.comments_enabled? %}
+    <h2>{{ 'blog.article_comments' | t }}</h2>
 
-    <div>
-      <label for="author">{{ 'blog.comment_form_name' | t }}</label>
-      <input type="text" name="comment[author]" id="author" value="{{ form.author }}" required>
+    <div id="comments" class="article-page__comments">
+      {% paginate article.comments by 10 %}
+        {% for comment in article.comments %}
+          <div>
+            <p>{{ comment.author }}</p>
+            <p>
+              {{- comment.created_at | time_tag: format: 'date' -}}
+            </p>
+            <p>{{ comment.content }}</p>
+          </div>
+        {% endfor %}
+
+        {{ paginate | default_pagination: anchor: 'comments' }}
+      {% endpaginate %}
     </div>
 
-    <div>
-      <label for="email">{{ 'blog.comment_form_email' | t }}</label>
-      <input type="email" name="comment[email]" id="email" value="{{ form.email }}" required>
-    </div>
+    {% form 'new_comment', article %}
+      <h2>{{ 'blog.comment_form_title' | t }}</h2>
 
-    <div>
-      <label for="body">{{ 'blog.comment_form_body' | t }}</label>
-      <textarea name="comment[body]" id="body" required>{{ form.body }}</textarea>
-    </div>
+      {{ form.errors | default_errors }}
 
-    <input type="submit" value="{{ 'blog.comment_form_submit' | t }}">
-  {% endform %}
-{% endif %}
+      <div>
+        <label for="author">{{ 'blog.comment_form_name' | t }}</label>
+        <input type="text" name="comment[author]" id="author" value="{{ form.author }}" required>
+      </div>
+
+      <div>
+        <label for="email">{{ 'blog.comment_form_email' | t }}</label>
+        <input type="email" name="comment[email]" id="email" value="{{ form.email }}" required>
+      </div>
+
+      <div>
+        <label for="body">{{ 'blog.comment_form_body' | t }}</label>
+        <textarea name="comment[body]" id="body" required>{{ form.body }}</textarea>
+      </div>
+
+      <input type="submit" value="{{ 'blog.comment_form_submit' | t }}">
+    {% endform %}
+  {% endif %}
+</article>
+
+{% stylesheet %}
+  .article-page {
+    padding-block: 3rem 4rem;
+  }
+
+  .article-page__image {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .article-page__header {
+    border-bottom: 1px solid var(--color-border);
+    margin-block: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .article-page h1 {
+    font-size: clamp(2.3rem, 5vw, 5.4rem);
+    margin-top: 0.7rem;
+    text-transform: uppercase;
+  }
+
+  .article-page__header p,
+  .article-page__body {
+    color: var(--color-muted);
+  }
+
+  .article-page__body {
+    font-size: 1.04rem;
+    max-width: 48rem;
+  }
+
+  .article-page__body > * + *,
+  .article-page form > * + * {
+    margin-top: 1rem;
+  }
+
+  .article-page h2 {
+    margin-top: 3rem;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.article",
-  "settings": []
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Journal"
+    }
+  ]
 }
 {% endschema %}

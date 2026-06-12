@@ -1,0 +1,123 @@
+{% liquid
+  assign card_product = product
+  assign current_variant = card_product.selected_or_first_available_variant
+  assign second_image = card_product.images[1]
+  assign card_badge = ''
+  assign is_preorder = false
+
+  if card_product.tags contains 'pre-order' or card_product.tags contains 'preorder'
+    assign is_preorder = true
+  endif
+
+  if card_product.available == false
+    assign card_badge = 'Sold out'
+  elsif is_preorder
+    assign card_badge = 'Pre-order'
+  elsif card_product.tags contains 'new'
+    assign card_badge = 'New'
+  elsif card_product.tags contains 'best-seller'
+    assign card_badge = 'Best seller'
+  endif
+%}
+
+<article class="product-card" data-product-card>
+  <a class="product-card__media" href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}">
+    {% if card_badge != blank %}
+      <span class="product-card__badge">{{ card_badge }}</span>
+    {% endif %}
+
+    {% if card_product.featured_image %}
+      {{
+        card_product.featured_image
+        | image_url: width: 760, height: 940, crop: 'center'
+        | image_tag:
+          class: 'product-card__image product-card__image--primary',
+          widths: '320, 520, 760',
+          sizes: '(min-width: 990px) 25vw, (min-width: 640px) 50vw, 100vw',
+          loading: 'lazy',
+          alt: card_product.title
+      }}
+
+      {% if second_image %}
+        {{
+          second_image
+          | image_url: width: 760, height: 940, crop: 'center'
+          | image_tag:
+            class: 'product-card__image product-card__image--secondary',
+            widths: '320, 520, 760',
+            sizes: '(min-width: 990px) 25vw, (min-width: 640px) 50vw, 100vw',
+            loading: 'lazy',
+            alt: second_image.alt | default: card_product.title
+        }}
+      {% endif %}
+    {% else %}
+      <span class="product-card__placeholder"></span>
+    {% endif %}
+  </a>
+
+  <div class="product-card__content">
+    <div>
+      <a class="product-card__title" href="{{ card_product.url }}">{{ card_product.title }}</a>
+      <p class="price">
+        {% if current_variant.compare_at_price > current_variant.price %}
+          <span class="price__sale">{{ current_variant.price | money }}</span>
+          <s>{{ current_variant.compare_at_price | money }}</s>
+        {% else %}
+          {{ current_variant.price | money }}
+        {% endif %}
+      </p>
+      {% render 'unit-price', variant: current_variant %}
+    </div>
+
+    {% for option in card_product.options_with_values %}
+      {% assign option_name = option.name | downcase %}
+      {% if option_name contains 'color' or option_name contains 'shade' or option_name contains 'finish' %}
+        <div class="product-card__swatches" aria-label="{{ option.name }}">
+          {% for value in option.values limit: 6 %}
+            <span class="product-card__swatch" title="{{ value | escape }}" style="background-color: {{ value | escape }};"></span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    <p class="product-card__stock">
+      {% if card_product.available %}
+        {% if current_variant.inventory_management and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= 8 %}
+          Only {{ current_variant.inventory_quantity }} left
+        {% elsif is_preorder %}
+          Reserve before the next atelier drop
+        {% else %}
+          In stock
+        {% endif %}
+      {% else %}
+        Join the restock list
+      {% endif %}
+    </p>
+
+    <div class="product-card__actions">
+      {% if card_product.available %}
+        {% form 'product', card_product %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit">{% if is_preorder %}Pre-order{% else %}Quick buy{% endif %}</button>
+        {% endform %}
+      {% else %}
+        <a class="button button--secondary" href="{{ card_product.url }}#BackInStock">Notify me</a>
+      {% endif %}
+
+      <details class="product-card__quick-view">
+        <summary>Quick view</summary>
+        <div class="product-card__quick-view-panel">
+          <button class="product-card__quick-view-close" type="button" onclick="this.closest('details').removeAttribute('open')" aria-label="Close">x</button>
+          <p class="eyebrow">Quick view</p>
+          <h3>{{ card_product.title }}</h3>
+          <p class="price">{{ card_product.price | money }}</p>
+          {% if card_product.description != blank %}
+            <div class="product-card__excerpt">{{ card_product.description | strip_html | truncate: 180 }}</div>
+          {% endif %}
+          <a class="button button--secondary" href="{{ card_product.url }}">View details</a>
+        </div>
+      </details>
+    </div>
+  </div>
+</article>

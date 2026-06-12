@@ -5,19 +5,48 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/404
 {% endcomment %}
 
-<h1>{{ '404.title' | t }}</h1>
+<section class="not-found-page">
+  <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+  <h1>{{ '404.title' | t }}</h1>
 
-<p>
-  {{ '404.not_found' | t }}
-</p>
+  <p>
+    {{ '404.not_found' | t }}
+  </p>
 
-<a href="{{ routes.all_products_collection_url }}">
-  {{ '404.back_to_shopping' | t }}
-</a>
+  <a class="button" href="{{ routes.all_products_collection_url }}">
+    {{ '404.back_to_shopping' | t }}
+  </a>
+</section>
+
+{% stylesheet %}
+  .not-found-page {
+    background: var(--color-accent-soft);
+    margin-block: 3rem 4rem;
+    padding: 3rem;
+  }
+
+  .not-found-page h1 {
+    font-size: clamp(2.6rem, 6vw, 6rem);
+    margin-top: 0.7rem;
+    text-transform: uppercase;
+  }
+
+  .not-found-page p:not(.eyebrow) {
+    color: var(--color-muted);
+    margin-block: 1rem 1.5rem;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.404",
-  "settings": []
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Lost the lash line"
+    }
+  ]
 }
 {% endschema %}

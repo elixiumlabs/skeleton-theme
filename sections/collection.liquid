@@ -1,47 +1,314 @@
-{% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
-{% endcomment %}
-
-<h1>{{ collection.title }}</h1>
-
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
+<section class="collection-page">
+  <div class="collection-page__header">
+    <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+    <h1>{{ collection.title }}</h1>
+    {% if collection.description != blank %}
+      <div class="collection-page__description">
+        {{ collection.description }}
       </div>
-    {% endfor %}
+    {% endif %}
+  </div>
 
-    {{ paginate | default_pagination }}
+  {% paginate collection.products by section.settings.products_per_page %}
+    <form class="collection-toolbar" method="get">
+      <div class="collection-toolbar__filters">
+        {% for filter in collection.filters %}
+          <details class="collection-filter">
+            <summary>{{ filter.label }}</summary>
+            <div class="collection-filter__values">
+              {% case filter.type %}
+                {% when 'price_range' %}
+                  <label>
+                    <span>Min</span>
+                    <input name="{{ filter.min_value.param_name }}" type="number" min="0" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}">
+                  </label>
+                  <label>
+                    <span>Max</span>
+                    <input name="{{ filter.max_value.param_name }}" type="number" min="0" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}">
+                  </label>
+                {% else %}
+                  {% for value in filter.values %}
+                    {% assign filter_label = filter.label | downcase %}
+                    <label class="collection-filter__choice {% if filter_label contains 'color' or filter_label contains 'shade' %}collection-filter__choice--swatch{% endif %}">
+                      <input
+                        type="checkbox"
+                        name="{{ value.param_name }}"
+                        value="{{ value.value }}"
+                        {% if value.active %}checked{% endif %}
+                        {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                      >
+                      {% if filter_label contains 'color' or filter_label contains 'shade' %}
+                        <span class="collection-filter__swatch" style="background-color: {{ value.label | escape }};"></span>
+                      {% endif %}
+                      <span>{{ value.label }} ({{ value.count }})</span>
+                    </label>
+                  {% endfor %}
+              {% endcase %}
+            </div>
+          </details>
+        {% endfor %}
+      </div>
+
+      <label class="collection-sort">
+        <span>Sort</span>
+        <select name="sort_by">
+          {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+          {% for option in collection.sort_options %}
+            <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{ option.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <button type="submit">Apply</button>
+    </form>
+
+    <div class="collection-products product-grid" id="CollectionGrid" data-infinite-grid>
+      {% for product in collection.products %}
+        {% render 'product-card', product: product %}
+      {% else %}
+        <div class="collection-page__empty">
+          <h2>{{ section.settings.empty_heading }}</h2>
+          <p>{{ section.settings.empty_copy }}</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if paginate.pages > 1 %}
+      <nav class="collection-pagination" aria-label="Pagination">
+        {% if paginate.next %}
+          <a class="button collection-load-more" href="{{ paginate.next.url }}" data-next-page>Load more</a>
+        {% else %}
+          {{ paginate | default_pagination }}
+        {% endif %}
+      </nav>
+    {% endif %}
   {% endpaginate %}
-</div>
+</section>
+
+<script>
+  (() => {
+    const grid = document.querySelector('[data-infinite-grid]');
+    const nextLink = document.querySelector('[data-next-page]');
+    if (!grid || !nextLink || !('IntersectionObserver' in window)) return;
+
+    let loading = false;
+    const loadNext = async () => {
+      if (loading || !nextLink.href) return;
+      loading = true;
+      nextLink.textContent = 'Loading';
+      const response = await fetch(nextLink.href);
+      const html = await response.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      doc.querySelectorAll('[data-product-card]').forEach((card) => grid.append(card));
+      const replacement = doc.querySelector('[data-next-page]');
+      if (replacement) {
+        nextLink.href = replacement.href;
+        nextLink.textContent = 'Load more';
+        loading = false;
+      } else {
+        nextLink.remove();
+        observer.disconnect();
+      }
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) loadNext();
+    }, { rootMargin: '500px 0px' });
+
+    observer.observe(nextLink);
+    nextLink.addEventListener('click', (event) => {
+      event.preventDefault();
+      loadNext();
+    });
+  })();
+</script>
 
 {% stylesheet %}
-  .collection-products {
+  .collection-page {
+    padding-block: 3rem 4rem;
+  }
+
+  .collection-page__header {
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .collection-page h1 {
+    font-size: clamp(2.6rem, 6vw, 6rem);
+    margin-top: 0.7rem;
+    text-transform: uppercase;
+  }
+
+  .collection-page__description {
+    color: var(--color-muted);
+    margin-top: 1rem;
+    max-width: 44rem;
+  }
+
+  .collection-toolbar {
+    align-items: end;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+  }
+
+  .collection-toolbar__filters {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+
+  .collection-filter {
+    position: relative;
+  }
+
+  .collection-filter summary,
+  .collection-sort span {
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    display: inline-flex;
+    font-family: var(--font-secondary--family);
+    font-size: 0.78rem;
+    font-weight: 700;
+    list-style: none;
+    min-height: 3rem;
+    padding: 0.85rem 1rem;
+    text-transform: uppercase;
+  }
+
+  .collection-filter summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .collection-filter__values {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 1.25rem 3rem rgba(8, 6, 7, 0.14);
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 0.7rem;
+    left: 0;
+    min-width: 16rem;
+    padding: 1rem;
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    z-index: 6;
+  }
+
+  .collection-filter__choice {
+    align-items: center;
+    display: flex;
+    gap: 0.55rem;
+    min-width: max-content;
+  }
+
+  .collection-filter__swatch {
+    background: var(--color-accent);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    height: 1rem;
+    width: 1rem;
+  }
+
+  .collection-sort {
+    align-items: center;
+    display: flex;
+  }
+
+  .collection-sort span {
+    border-right: 0;
+  }
+
+  .collection-page__empty {
+    background: var(--color-accent-soft);
+    grid-column: 1 / -1;
+    padding: 3rem;
+  }
+
+  .collection-page__empty h2 {
+    font-size: clamp(1.8rem, 4vw, 3.5rem);
+    text-transform: uppercase;
+  }
+
+  .collection-page__empty p {
+    color: var(--color-muted);
+    margin-top: 1rem;
+  }
+
+  .collection-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.5rem;
+  }
+
+  .collection-pagination .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .collection-pagination a,
+  .collection-pagination span {
+    border: 1px solid var(--color-border);
+    display: inline-flex;
+    min-width: 2.5rem;
+    padding: 0.55rem 0.75rem;
+    text-decoration: none;
+  }
+
+  @media (max-width: 700px) {
+    .collection-filter,
+    .collection-filter summary,
+    .collection-sort,
+    .collection-sort select,
+    .collection-toolbar button {
+      width: 100%;
+    }
+
+    .collection-filter__values {
+      position: static;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.collection",
-  "settings": []
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Lash collection"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 6,
+      "max": 24,
+      "step": 3,
+      "default": 12
+    },
+    {
+      "type": "text",
+      "id": "empty_heading",
+      "label": "Empty heading",
+      "default": "The edit is coming soon."
+    },
+    {
+      "type": "textarea",
+      "id": "empty_copy",
+      "label": "Empty copy",
+      "default": "Add lash styles to this collection to fill the grid."
+    }
+  ]
 }
 {% endschema %}

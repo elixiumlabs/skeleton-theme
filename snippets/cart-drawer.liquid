@@ -1,0 +1,50 @@
+<div class="cart-drawer__panel">
+  <div class="cart-drawer__header">
+    <p class="eyebrow">Your selection</p>
+    <button type="button" onclick="this.closest('details').removeAttribute('open')" aria-label="Close cart">x</button>
+  </div>
+
+  {% if cart.item_count > 0 %}
+    <form action="{{ routes.cart_url }}" method="post" class="cart-drawer__form">
+      <div class="cart-drawer__items">
+        {% for item in cart.items %}
+          <div class="cart-drawer__item">
+            {% if item.image %}
+              {{
+                item.image
+                | image_url: width: 180, height: 220, crop: 'center'
+                | image_tag:
+                  class: 'cart-drawer__image',
+                  widths: '120, 180',
+                  sizes: '5rem',
+                  loading: 'lazy',
+                  alt: item.product.title
+              }}
+            {% endif %}
+            <div>
+              <a href="{{ item.url }}">{{ item.product.title }}</a>
+              <p>{{ item.quantity }} x {{ item.final_price | money }}</p>
+              <a href="{{ item.url_to_remove }}">Remove</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <label for="CartNoteDrawer">Gift note or delivery request</label>
+      <textarea id="CartNoteDrawer" name="note" rows="4">{{ cart.note }}</textarea>
+
+      <div class="cart-drawer__summary">
+        <span>Subtotal</span>
+        <span class="price">{{ cart.total_price | money }}</span>
+      </div>
+
+      <input type="submit" value="Update cart">
+      <input type="submit" name="checkout" value="Checkout">
+    </form>
+  {% else %}
+    <div class="cart-drawer__empty">
+      <h2>Your lash wardrobe is empty.</h2>
+      <a class="button" href="{{ routes.all_products_collection_url }}">Shop lashes</a>
+    </div>
+  {% endif %}
+</div>

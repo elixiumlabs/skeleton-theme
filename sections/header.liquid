@@ -1,59 +1,362 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+<header class="site-header">
+  <a class="site-header__brand" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+    <span>{{ section.settings.brand_text | default: shop.name }}</span>
+  </a>
 
-  <div class="header__menu">
+  <nav class="site-header__menu" aria-label="Main menu">
     {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
+      {% if link.links != blank %}
+        <details class="site-header__mega">
+          <summary>{{ link.title }}</summary>
+          <div class="site-header__mega-panel">
+            <div class="site-header__mega-links">
+              {% for child_link in link.links %}
+                <div>
+                  <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                  {% for grandchild_link in child_link.links %}
+                    <a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+            {% if section.settings.promo_heading != blank %}
+              <a class="site-header__promo" href="{{ section.settings.promo_link | default: routes.all_products_collection_url }}">
+                <span>{{ section.settings.promo_heading }}</span>
+                <small>{{ section.settings.promo_copy }}</small>
+              </a>
+            {% endif %}
+          </div>
+        </details>
+      {% else %}
+        {{ link.title | link_to: link.url }}
+      {% endif %}
     {% endfor %}
-  </div>
+  </nav>
 
-  <div class="header__icons">
+  <div class="site-header__icons">
+    <details class="site-header__search">
+      <summary aria-label="Search">Search</summary>
+      <form action="{{ routes.search_url }}" method="get" role="search">
+        <input type="search" name="q" placeholder="{{ 'search.placeholder' | t }}" predictive-search="true">
+        <input type="hidden" name="type" value="product,article,page">
+        <input type="hidden" name="options[prefix]" value="last">
+        <button type="submit">Go</button>
+      </form>
+    </details>
+
     {% if shop.customer_accounts_enabled %}
       <shopify-account menu="{{ section.settings.customer_account_menu }}">
         {{ 'icon-account.svg' | inline_asset_content }}
       </shopify-account>
     {% endif %}
 
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
+    <details class="cart-drawer" scroll-lock>
+      <summary aria-label="{{ 'cart.title' | t }}">
+        {% if cart.item_count > 0 %}
+          <sup aria-label="{{ cart.item_count }} items in cart">{{ cart.item_count }}</sup>
+        {% endif %}
 
-      {{ 'icon-cart.svg' | inline_asset_content }}
-    </a>
+        {{ 'icon-cart.svg' | inline_asset_content }}
+      </summary>
+      {% render 'cart-drawer' %}
+    </details>
   </div>
 </header>
 
 {% stylesheet %}
-  header {
-    height: 5rem;
-    display: flex;
+  .site-header {
     align-items: center;
-    justify-content: space-between;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    gap: 1.25rem;
+    min-height: 5rem;
+    padding-block: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 2;
   }
-  header a {
+
+  .site-header__brand {
+    color: var(--color-foreground);
+    font-family: var(--font-secondary--family);
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1;
+    margin-right: auto;
+    min-width: fit-content;
     position: relative;
     text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .site-header__brand::after {
+    background: var(--color-accent);
+    content: '';
+    display: block;
+    height: 2px;
+    margin-top: 0.38rem;
+    width: 2.4rem;
+  }
+
+  .site-header a {
     color: var(--color-foreground);
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    text-decoration: none;
   }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
+
+  .site-header__menu {
+    align-items: center;
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.35rem;
+    justify-content: center;
+  }
+
+  .site-header__menu a {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .site-header__menu a:hover {
+    color: var(--color-accent);
+  }
+
+  .site-header a sup,
+  .site-header summary sup {
+    align-items: center;
+    background: var(--color-accent);
+    border-radius: 999px;
+    color: var(--color-foreground);
+    display: inline-flex;
+    font-size: 0.68rem;
+    height: 1.1rem;
+    justify-content: center;
+    min-width: 1.1rem;
+    position: absolute;
+    right: -0.45rem;
+    top: -0.45rem;
+  }
+
+  .site-header svg {
+    width: 1.45rem;
+  }
+
+  .site-header__icons {
+    align-items: center;
+    display: flex;
+    gap: 0.9rem;
+  }
+
+  .site-header__icons summary {
+    cursor: pointer;
+    display: flex;
+    list-style: none;
+    position: relative;
+  }
+
+  .site-header__icons summary::-webkit-details-marker,
+  .site-header__mega summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .site-header__mega {
+    position: relative;
+  }
+
+  .site-header__mega summary,
+  .site-header__search summary {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .site-header__mega-panel,
+  .site-header__search form,
+  .cart-drawer__panel {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 1.5rem 4rem rgba(8, 6, 7, 0.16);
+    position: absolute;
+    z-index: 10;
+  }
+
+  .site-header__mega-panel {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: minmax(18rem, 1fr) minmax(12rem, 18rem);
+    left: 50%;
+    padding: 1.25rem;
+    top: calc(100% + 1.25rem);
+    transform: translateX(-50%);
+    width: min(48rem, calc(100vw - 2rem));
+  }
+
+  .site-header__mega-links {
+    display: grid;
     gap: 1rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .site-header__mega-links div {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .site-header__mega-links div > a:first-child {
+    color: var(--color-foreground);
+  }
+
+  .site-header__mega-links div > a:not(:first-child) {
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    justify-content: flex-start;
+    text-transform: none;
+  }
+
+  .site-header__promo {
+    align-content: end;
+    background: var(--color-foreground);
+    color: #ffffff;
+    display: grid;
+    min-height: 11rem;
+    padding: 1rem;
+  }
+
+  .site-header__promo span {
+    color: var(--color-accent);
+    font-family: var(--font-secondary--family);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .site-header__promo small {
+    color: color-mix(in srgb, #ffffff 76%, transparent);
+    margin-top: 0.35rem;
+  }
+
+  .site-header__search {
+    position: relative;
+  }
+
+  .site-header__search form {
+    display: grid;
+    gap: 0.6rem;
+    padding: 1rem;
+    right: 0;
+    top: calc(100% + 1rem);
+    width: min(22rem, calc(100vw - 2rem));
+  }
+
+  .cart-drawer {
+    position: relative;
+  }
+
+  .cart-drawer__panel {
+    color: var(--color-foreground);
+    display: grid;
+    max-height: min(42rem, calc(100vh - 7rem));
+    overflow: auto;
+    padding: 1.2rem;
+    right: 0;
+    top: calc(100% + 1rem);
+    width: min(26rem, calc(100vw - 2rem));
+  }
+
+  .cart-drawer__header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .cart-drawer__header button {
+    background: transparent;
+    border: 0;
+    color: var(--color-foreground);
+    min-height: 1.75rem;
+    padding: 0.1rem 0.35rem;
+  }
+
+  .cart-drawer__form,
+  .cart-drawer__items {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .cart-drawer__item {
+    display: grid;
+    gap: 0.8rem;
+    grid-template-columns: 5rem minmax(0, 1fr);
+  }
+
+  .cart-drawer__image {
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .cart-drawer__item a:first-child {
+    font-family: var(--font-secondary--family);
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .cart-drawer__item p,
+  .cart-drawer__item a:last-child {
+    color: var(--color-muted);
+    font-size: 0.84rem;
+  }
+
+  .cart-drawer__summary {
+    align-items: center;
+    border-block: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    padding-block: 1rem;
+  }
+
+  .cart-drawer__form input[name='checkout'] {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-foreground);
+  }
+
+  .cart-drawer__empty {
+    display: grid;
+    gap: 1rem;
+    padding-block: 1rem;
+  }
+
+  .cart-drawer__empty h2 {
+    font-size: 1.35rem;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 760px) {
+    .site-header {
+      flex-wrap: wrap;
+    }
+
+    .site-header__menu {
+      flex-basis: 100%;
+      justify-content: flex-start;
+      order: 3;
+    }
+
+    .site-header__mega-panel {
+      grid-template-columns: 1fr;
+      left: 0;
+      transform: none;
+    }
+
+    .site-header__mega-links {
+      grid-template-columns: 1fr;
+    }
   }
 {% endstylesheet %}
 
@@ -61,6 +364,12 @@
 {
   "name": "t:general.header",
   "settings": [
+    {
+      "type": "text",
+      "id": "brand_text",
+      "label": "Brand text",
+      "default": "Lash Candii"
+    },
     {
       "type": "link_list",
       "id": "menu",
@@ -71,6 +380,23 @@
       "id": "customer_account_menu",
       "label": "t:labels.customer_account_menu",
       "default": "customer-account-main-menu"
+    },
+    {
+      "type": "text",
+      "id": "promo_heading",
+      "label": "In-menu promo heading",
+      "default": "The soft glam edit"
+    },
+    {
+      "type": "textarea",
+      "id": "promo_copy",
+      "label": "In-menu promo copy",
+      "default": "Shop signature lashes, tools, and restock favorites."
+    },
+    {
+      "type": "url",
+      "id": "promo_link",
+      "label": "In-menu promo link"
     }
   ]
 }

@@ -1,0 +1,118 @@
+<section class="faq-page">
+  <div class="faq-page__header">
+    <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+    <h1>{{ section.settings.heading }}</h1>
+  </div>
+
+  <div class="faq-page__items">
+    {% for block in section.blocks %}
+      <details class="faq-page__item" {{ block.shopify_attributes }}>
+        <summary>{{ block.settings.question }}</summary>
+        <div>{{ block.settings.answer }}</div>
+      </details>
+    {% endfor %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .faq-page {
+    display: grid;
+    gap: 2rem;
+    padding-block: 3rem 4rem;
+  }
+
+  .faq-page__header {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 2rem;
+  }
+
+  .faq-page h1 {
+    font-size: clamp(2.6rem, 6vw, 6rem);
+    margin-top: 0.7rem;
+    text-transform: uppercase;
+  }
+
+  .faq-page__items {
+    display: grid;
+    gap: 1px;
+  }
+
+  .faq-page__item {
+    border: 1px solid var(--color-border);
+    padding: 1.2rem;
+  }
+
+  .faq-page__item summary {
+    cursor: pointer;
+    font-family: var(--font-secondary--family);
+    font-weight: 700;
+    list-style: none;
+    text-transform: uppercase;
+  }
+
+  .faq-page__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-page__item div {
+    color: var(--color-muted);
+    margin-top: 0.9rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Questions"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Lash care and ordering"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How many times can I reuse a lash?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>With gentle removal and clean storage, each style is designed for multiple wears.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        {
+          "type": "question"
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer pre-orders?",
+            "answer": "<p>Yes. Products tagged pre-order show a reserve button and clear stock messaging.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
