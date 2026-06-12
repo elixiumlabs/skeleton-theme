@@ -29,6 +29,17 @@
               {% unless item.product.has_only_default_variant %}
                 <p>{{ item.variant.title }}</p>
               {% endunless %}
+              {% if item.selling_plan_allocation %}
+                <p>{{ item.selling_plan_allocation.selling_plan.name }}</p>
+              {% endif %}
+              {% render 'unit-price', variant: item.variant %}
+              {% if item.line_level_discount_allocations.size > 0 %}
+                <ul class="cart-item__discounts">
+                  {% for discount in item.line_level_discount_allocations %}
+                    <li>{{ discount.discount_application.title }} (-{{ discount.amount | money }})</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
               <a class="cart-item__remove" href="{{ item.url_to_remove }}">{{ 'cart.remove' | t }}</a>
             </div>
 
@@ -41,7 +52,12 @@
                 value="{{ item.quantity }}"
                 min="0"
               >
-              <p class="price">{{ item.final_line_price | money }}</p>
+              <p class="price">
+                {% if item.original_line_price != item.final_line_price %}
+                  <s>{{ item.original_line_price | money }}</s>
+                {% endif %}
+                {{ item.final_line_price | money }}
+              </p>
             </div>
           </div>
         {% endfor %}
@@ -55,11 +71,26 @@
           <span>Subtotal</span>
           <span class="price">{{ cart.total_price | money }}</span>
         </div>
+        {% if cart.cart_level_discount_applications.size > 0 %}
+          <div class="cart-summary__discounts">
+            {% for discount in cart.cart_level_discount_applications %}
+              <p>
+                <span>{{ discount.title }}</span>
+                <span>-{{ discount.total_allocated_amount | money }}</span>
+              </p>
+            {% endfor %}
+          </div>
+        {% endif %}
         <p>{{ section.settings.checkout_note }}</p>
         <div class="cart-summary__actions">
           <input type="submit" value="{{ 'cart.update' | t }}">
           <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
         </div>
+        {% if additional_checkout_buttons %}
+          <div class="cart-summary__accelerated">
+            {{ content_for_additional_checkout_buttons }}
+          </div>
+        {% endif %}
       </aside>
     </form>
   {% else %}
@@ -134,6 +165,14 @@
     margin-top: 0.35rem;
   }
 
+  .cart-item__discounts {
+    color: var(--color-accent);
+    font-size: 0.82rem;
+    list-style: none;
+    margin-top: 0.55rem;
+    padding: 0;
+  }
+
   .cart-item__remove {
     color: var(--color-muted);
     display: inline-flex;
@@ -184,6 +223,19 @@
     display: flex;
     justify-content: space-between;
     padding-block: 1rem;
+  }
+
+  .cart-summary__discounts {
+    border-bottom: 1px solid color-mix(in srgb, #ffffff 18%, transparent);
+    display: grid;
+    gap: 0.45rem;
+    padding-bottom: 1rem;
+  }
+
+  .cart-summary__discounts p {
+    color: var(--color-accent);
+    display: flex;
+    justify-content: space-between;
   }
 
   .cart-summary__actions {
