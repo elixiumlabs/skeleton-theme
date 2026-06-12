@@ -155,10 +155,10 @@
 
   /* ─── HERO ─── */
   .lash-hero {
-    color: #F2E8DC;
+    color: var(--color-foreground);
     display: grid;
     grid-column: 1 / -1;
-    min-height: clamp(42rem, 90svh, 60rem);
+    min-height: clamp(40rem, 88svh, 58rem);
     overflow: hidden;
     position: relative;
   }
@@ -176,17 +176,17 @@
     width: 100%;
   }
 
-  /* Deep editorial dark overlay — Fenty/Kylie style */
+  /* Soft bright wash so dark text reads over the image — Kylie style */
   .lash-hero__overlay {
     background:
-      linear-gradient(105deg,
-        rgba(11, 8, 16, 0.92) 0%,
-        rgba(11, 8, 16, 0.72) 38%,
-        rgba(11, 8, 16, 0.22) 62%,
-        rgba(11, 8, 16, 0.06) 100%),
+      linear-gradient(100deg,
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(255, 239, 245, 0.82) 36%,
+        rgba(255, 239, 245, 0.28) 64%,
+        rgba(255, 255, 255, 0.04) 100%),
       linear-gradient(0deg,
-        rgba(11, 8, 16, 0.55) 0%,
-        rgba(11, 8, 16, 0) 35%);
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0) 35%);
   }
 
   .lash-hero__content {
@@ -198,21 +198,21 @@
     width: 100%;
   }
 
-  /* Oversized serif headline — the money shot */
+  /* Oversized Poppins headline — the money shot */
   .lash-hero h1 {
-    font-size: clamp(4.2rem, 11vw, 12rem);
-    font-weight: 400;
-    letter-spacing: 0.03em;
-    line-height: 0.9;
+    font-size: clamp(4rem, 10.5vw, 11rem);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 0.92;
     max-width: 10ch;
     text-transform: uppercase;
   }
 
   .lash-hero__copy {
-    color: rgba(242, 232, 220, 0.68);
-    font-size: 0.95rem;
-    letter-spacing: 0.04em;
-    line-height: 1.75;
+    color: var(--color-muted);
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+    line-height: 1.7;
     max-width: 34rem;
   }
 
@@ -223,11 +223,9 @@
     margin-top: 0.35rem;
   }
 
-  /* ─── MARQUEE MOODBAR ─── */
+  /* ─── MARQUEE MOODBAR ─── (black strip for contrast) */
   .lash-moodbar {
-    background: #0F0B14;
-    border-top: 1px solid rgba(201, 168, 124, 0.1);
-    border-bottom: 1px solid rgba(201, 168, 124, 0.1);
+    background: #0A0A0A;
     grid-column: 1 / -1;
     overflow: hidden;
   }
@@ -240,42 +238,40 @@
   }
 
   .lash-moodbar span {
-    color: rgba(242, 232, 220, 0.45);
-    font-family: var(--font-primary--family);
-    font-size: 0.6rem;
+    color: #ffffff;
+    font-family: var(--font-secondary--family);
+    font-size: 0.64rem;
     font-weight: 700;
-    letter-spacing: 0.25em;
-    padding: 1.15rem 2rem;
+    letter-spacing: 0.22em;
+    padding: 1.1rem 2rem;
     text-transform: uppercase;
     white-space: nowrap;
   }
 
   .lash-moodbar__sep {
     color: var(--color-accent);
-    font-size: 0.45rem;
-    opacity: 0.7;
-    padding: 0 0;
+    font-size: 0.5rem;
+    padding: 0;
   }
 
   /* ─── COLLECTION INTRO ─── */
   .lash-home__intro {
-    margin-block: 6.5rem 2.75rem;
+    margin-block: 6rem 2.75rem;
     max-width: 58rem;
   }
 
   .lash-home__intro h2 {
-    font-size: clamp(2.6rem, 6vw, 6.5rem);
-    font-weight: 400;
-    letter-spacing: 0.04em;
+    font-size: clamp(2.4rem, 5.5vw, 5.5rem);
+    letter-spacing: 0.005em;
     margin-top: 1.25rem;
     text-transform: uppercase;
   }
 
   .lash-home__intro > p:not(.eyebrow) {
-    color: rgba(242, 232, 220, 0.55);
-    font-size: 0.92rem;
-    letter-spacing: 0.04em;
-    line-height: 1.75;
+    color: var(--color-muted);
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+    line-height: 1.7;
     margin-top: 1.35rem;
     max-width: 44rem;
   }
@@ -286,21 +282,25 @@
   }
 
   .lash-product {
-    background: #120D18;
+    background: #ffffff;
+    border: 1px solid rgba(247, 168, 196, 0.3);
+    box-shadow: 0 1.2rem 2.6rem rgba(199, 23, 103, 0.06);
     color: var(--color-foreground);
     display: grid;
     min-width: 0;
     text-decoration: none;
-    transition: background 260ms ease;
+    transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
   }
 
   .lash-product:hover {
-    background: #180F20;
+    border-color: rgba(247, 168, 196, 0.7);
+    box-shadow: 0 1.8rem 4rem rgba(199, 23, 103, 0.14);
+    transform: translateY(-4px);
   }
 
   .lash-product__media {
     aspect-ratio: 4 / 5;
-    background: #1C1426;
+    background: var(--color-accent-soft);
     display: block;
     overflow: hidden;
   }
@@ -317,7 +317,10 @@
   }
 
   .lash-product__placeholder {
-    background: linear-gradient(145deg, rgba(201, 168, 124, 0.09), rgba(11, 8, 16, 0.65));
+    background:
+      radial-gradient(circle at 50% 42%, rgba(10, 10, 10, 0.85) 0 0.18rem, transparent 0.2rem),
+      radial-gradient(ellipse at 50% 52%, transparent 0 3.4rem, rgba(10, 10, 10, 0.82) 3.45rem 3.55rem, transparent 3.6rem),
+      linear-gradient(145deg, var(--color-accent-soft), #ffffff);
     display: block;
     height: 100%;
     width: 100%;
@@ -334,18 +337,18 @@
 
   .lash-product__content span:first-child {
     color: var(--color-foreground);
-    font-family: var(--font-primary--family);
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.16em;
+    font-family: var(--font-secondary--family);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
   /* ─── RITUAL SECTION ─── */
   .lash-ritual {
     align-items: start;
-    background: #0D0914;
-    border: 1px solid rgba(201, 168, 124, 0.1);
+    background: linear-gradient(135deg, var(--color-accent-soft), #ffffff);
+    border: 1px solid rgba(247, 168, 196, 0.4);
     display: grid;
     gap: 2.5rem;
     grid-template-columns: minmax(16rem, 0.7fr) 1fr;
@@ -355,46 +358,46 @@
   }
 
   .lash-ritual__header h2 {
-    font-size: clamp(2.2rem, 4.5vw, 5rem);
-    font-weight: 400;
-    letter-spacing: 0.04em;
+    font-size: clamp(2.2rem, 4.5vw, 4.5rem);
+    letter-spacing: 0.005em;
     margin-top: 1.1rem;
     text-transform: uppercase;
   }
 
   .lash-ritual__steps {
-    background: rgba(201, 168, 124, 0.06);
     display: grid;
-    gap: 1px;
+    gap: 1rem;
     grid-template-columns: repeat(3, 1fr);
   }
 
   .lash-ritual__steps div {
-    background: #0D0914;
+    background: #ffffff;
+    border: 1px solid rgba(247, 168, 196, 0.4);
     min-height: 12rem;
     padding: 1.5rem;
-    transition: background 220ms ease;
+    transition: box-shadow 220ms ease, transform 220ms ease;
   }
 
   .lash-ritual__steps div:hover {
-    background: #120E1A;
+    box-shadow: 0 1.2rem 3rem rgba(199, 23, 103, 0.12);
+    transform: translateY(-3px);
   }
 
   .lash-ritual__num {
-    color: var(--color-accent);
+    color: var(--color-rose);
     display: block;
-    font-family: var(--font-primary--family);
-    font-size: 0.6rem;
+    font-family: var(--font-secondary--family);
+    font-size: 0.66rem;
     font-weight: 700;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
   }
 
   .lash-ritual__steps p {
-    color: rgba(242, 232, 220, 0.72);
+    color: var(--color-foreground);
     font-family: var(--font-secondary--family);
-    font-size: clamp(1.1rem, 2vw, 1.7rem);
-    font-weight: 400;
-    letter-spacing: 0.03em;
+    font-size: clamp(1.05rem, 2vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: 0.005em;
     line-height: 1.2;
     margin-top: 1.5rem;
   }
@@ -412,7 +415,7 @@
 
   @media (max-width: 640px) {
     .lash-hero {
-      min-height: 46rem;
+      min-height: 44rem;
     }
 
     .lash-hero__image {
@@ -422,9 +425,9 @@
     .lash-hero__overlay {
       background:
         linear-gradient(180deg,
-          rgba(11, 8, 16, 0.88) 0%,
-          rgba(11, 8, 16, 0.62) 55%,
-          rgba(11, 8, 16, 0.18) 100%);
+          rgba(255, 255, 255, 0.94) 0%,
+          rgba(255, 239, 245, 0.78) 55%,
+          rgba(255, 255, 255, 0.18) 100%);
     }
 
     .lash-hero__content {
@@ -433,7 +436,7 @@
     }
 
     .lash-hero h1 {
-      font-size: 3.9rem;
+      font-size: 3.6rem;
     }
 
     .lash-ritual__steps {

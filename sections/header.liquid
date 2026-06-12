@@ -66,8 +66,9 @@
 
 {% stylesheet %}
   .site-header {
-    background: var(--color-background);
-    border-bottom: 1px solid rgba(201, 168, 124, 0.12);
+    background: color-mix(in srgb, #ffffff 88%, transparent);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(247, 168, 196, 0.3);
     display: grid;
     grid-template-columns: var(--content-grid);
     position: sticky;
@@ -80,17 +81,17 @@
     display: flex;
     gap: 2rem;
     grid-column: 2;
-    min-height: 5rem;
+    min-height: 4.75rem;
   }
 
-  /* Editorial serif brand mark */
+  /* Brand mark — bold Poppins, wide tracking */
   .site-header__brand {
     color: var(--color-foreground);
     display: block;
     font-family: var(--font-secondary--family);
     font-size: clamp(1.05rem, 2vw, 1.45rem);
-    font-weight: 400;
-    letter-spacing: 0.35em;
+    font-weight: 700;
+    letter-spacing: 0.28em;
     margin-right: auto;
     min-width: fit-content;
     position: relative;
@@ -100,7 +101,7 @@
   }
 
   .site-header__brand:hover {
-    color: var(--color-accent);
+    color: var(--color-rose);
   }
 
   .site-header a {
@@ -122,10 +123,10 @@
   }
 
   .site-header__menu a {
-    color: rgba(242, 232, 220, 0.58);
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
+    color: var(--color-foreground);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
     padding: 0.5rem 0;
     position: relative;
     text-transform: uppercase;
@@ -136,7 +137,7 @@
     background: var(--color-accent);
     bottom: -1px;
     content: '';
-    height: 1px;
+    height: 2px;
     left: 0;
     position: absolute;
     transform: scaleX(0);
@@ -146,7 +147,7 @@
   }
 
   .site-header__menu a:hover {
-    color: var(--color-foreground);
+    color: var(--color-rose);
   }
 
   .site-header__menu a:hover::after {
@@ -173,20 +174,19 @@
   }
 
   .site-header svg {
-    opacity: 0.7;
     transition: opacity 200ms ease;
     width: 1.3rem;
   }
 
   .site-header svg:hover {
-    opacity: 1;
+    opacity: 0.65;
   }
 
   /* Icons group */
   .site-header__icons {
     align-items: center;
     display: flex;
-    gap: 1.35rem;
+    gap: 1.25rem;
     margin-left: auto;
   }
 
@@ -209,27 +209,27 @@
 
   .site-header__mega summary,
   .site-header__search summary {
-    color: rgba(242, 232, 220, 0.58);
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
+    color: var(--color-foreground);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     transition: color 200ms ease;
   }
 
   .site-header__mega summary:hover,
   .site-header__search summary:hover {
-    color: var(--color-foreground);
+    color: var(--color-rose);
   }
 
   /* Dropdown panels */
   .site-header__mega-panel,
   .site-header__search form,
   .cart-drawer__panel {
-    background: #120D18;
-    border: 1px solid rgba(201, 168, 124, 0.14);
+    background: #ffffff;
+    border: 1px solid rgba(247, 168, 196, 0.45);
     border-radius: 0;
-    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.75);
+    box-shadow: 0 1.8rem 4.5rem rgba(199, 23, 103, 0.16);
     position: absolute;
     z-index: 10;
   }
@@ -240,7 +240,7 @@
     grid-template-columns: minmax(18rem, 1fr) minmax(12rem, 18rem);
     left: 50%;
     padding: 1.5rem;
-    top: calc(100% + 1.5rem);
+    top: calc(100% + 1.25rem);
     transform: translateX(-50%);
     width: min(48rem, calc(100vw - 2rem));
   }
@@ -258,56 +258,56 @@
 
   .site-header__mega-links div > a:first-child {
     color: var(--color-foreground);
-    font-size: 0.65rem;
+    font-size: 0.66rem;
     font-weight: 700;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
   .site-header__mega-links div > a:not(:first-child) {
     color: var(--color-muted);
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     justify-content: flex-start;
     text-transform: none;
     transition: color 200ms ease;
   }
 
   .site-header__mega-links div > a:hover {
-    color: var(--color-accent);
+    color: var(--color-rose);
   }
 
   /* In-menu promo tile */
   .site-header__promo {
     align-content: end;
     background:
-      linear-gradient(145deg, rgba(201, 168, 124, 0.14), rgba(201, 168, 124, 0.02)),
-      #1E1628;
-    border: 1px solid rgba(201, 168, 124, 0.12);
+      linear-gradient(145deg, var(--color-accent-soft), #ffffff);
+    border: 1px solid rgba(247, 168, 196, 0.45);
     color: var(--color-foreground);
     display: grid;
     min-height: 11rem;
     padding: 1.25rem;
     text-decoration: none;
-    transition: border-color 200ms ease;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
   }
 
   .site-header__promo:hover {
-    border-color: rgba(201, 168, 124, 0.3);
+    border-color: var(--color-accent);
+    box-shadow: 0 0.8rem 2rem rgba(199, 23, 103, 0.12);
   }
 
   .site-header__promo span {
-    color: var(--color-accent);
-    font-family: var(--font-primary--family);
-    font-size: 0.65rem;
+    color: var(--color-rose);
+    font-family: var(--font-secondary--family);
+    font-size: 0.66rem;
     font-weight: 700;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
   }
 
   .site-header__promo small {
-    color: rgba(242, 232, 220, 0.55);
+    color: var(--color-muted);
     display: block;
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     margin-top: 0.4rem;
   }
 
@@ -321,7 +321,7 @@
     gap: 0.6rem;
     padding: 1rem;
     right: 0;
-    top: calc(100% + 1.25rem);
+    top: calc(100% + 1.1rem);
     width: min(22rem, calc(100vw - 2rem));
   }
 
@@ -337,13 +337,13 @@
     overflow: auto;
     padding: 1.5rem;
     right: 0;
-    top: calc(100% + 1.25rem);
+    top: calc(100% + 1.1rem);
     width: min(26rem, calc(100vw - 2rem));
   }
 
   .cart-drawer__header {
     align-items: center;
-    border-bottom: 1px solid rgba(201, 168, 124, 0.1);
+    border-bottom: 1px solid rgba(247, 168, 196, 0.4);
     display: flex;
     justify-content: space-between;
     margin-bottom: 1.25rem;
@@ -351,10 +351,10 @@
   }
 
   .cart-drawer__header h2 {
-    font-family: var(--font-primary--family);
-    font-size: 0.65rem;
+    font-family: var(--font-secondary--family);
+    font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
   }
 
@@ -391,28 +391,28 @@
 
   .cart-drawer__item a:first-child {
     color: var(--color-foreground);
-    font-family: var(--font-primary--family);
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
+    font-family: var(--font-secondary--family);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
     text-decoration: none;
     text-transform: uppercase;
     transition: color 200ms ease;
   }
 
   .cart-drawer__item a:first-child:hover {
-    color: var(--color-accent);
+    color: var(--color-rose);
   }
 
   .cart-drawer__item p,
   .cart-drawer__item a:last-child {
     color: var(--color-muted);
-    font-size: 0.8rem;
+    font-size: 0.82rem;
   }
 
   .cart-drawer__discounts {
-    color: var(--color-accent);
-    font-size: 0.78rem;
+    color: var(--color-rose);
+    font-size: 0.8rem;
     list-style: none;
     margin-top: 0.4rem;
     padding: 0;
@@ -420,7 +420,7 @@
 
   .cart-drawer__summary {
     align-items: center;
-    border-block: 1px solid rgba(201, 168, 124, 0.1);
+    border-block: 1px solid rgba(247, 168, 196, 0.4);
     display: flex;
     justify-content: space-between;
     padding-block: 1rem;
@@ -430,7 +430,7 @@
     background: var(--color-accent);
     border-color: var(--color-accent);
     color: var(--color-accent-foreground);
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
   }
 
   .cart-drawer__empty {
@@ -440,10 +440,7 @@
   }
 
   .cart-drawer__empty h2 {
-    font-family: var(--font-secondary--family);
-    font-size: 1.6rem;
-    font-weight: 400;
-    letter-spacing: 0.06em;
+    font-size: 1.5rem;
     text-transform: uppercase;
   }
 
@@ -451,8 +448,8 @@
     .site-header__inner {
       flex-wrap: wrap;
       gap: 0.6rem;
-      min-height: 4.5rem;
-      padding-block: 0.75rem;
+      min-height: 4.25rem;
+      padding-block: 0.7rem;
     }
 
     .site-header__brand {
@@ -464,7 +461,7 @@
     }
 
     .site-header__menu {
-      border-top: 1px solid rgba(201, 168, 124, 0.08);
+      border-top: 1px solid rgba(247, 168, 196, 0.3);
       flex-basis: 100%;
       gap: 0.25rem 1.4rem;
       justify-content: flex-start;

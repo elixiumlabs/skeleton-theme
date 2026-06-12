@@ -23,7 +23,7 @@
       {
         "type": "font_picker",
         "id": "type_secondary_font",
-        "default": "cormorant_garamond_n4",
+        "default": "poppins_n4",
         "label": "Secondary"
       }
     ]
@@ -65,37 +65,37 @@
       {
         "type": "color",
         "id": "background_color",
-        "default": "#0B0810",
+        "default": "#FFFFFF",
         "label": "t:labels.background"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#F2E8DC",
+        "default": "#0A0A0A",
         "label": "t:labels.foreground"
       },
       {
         "type": "color",
         "id": "accent_color",
-        "default": "#C9A87C",
+        "default": "#F7A8C4",
         "label": "Accent"
       },
       {
         "type": "color",
         "id": "accent_foreground_color",
-        "default": "#0B0810",
+        "default": "#0A0A0A",
         "label": "Accent foreground"
       },
       {
         "type": "color",
         "id": "accent_soft_color",
-        "default": "#3A1424",
+        "default": "#FFEFF5",
         "label": "Soft accent"
       },
       {
         "type": "color",
         "id": "accent_soft_foreground_color",
-        "default": "#F2E8DC",
+        "default": "#0A0A0A",
         "label": "Soft accent foreground"
       },
       {

@@ -71,9 +71,8 @@
 
 {% stylesheet %}
   .site-footer {
-    background: #050308;
-    border-top: 1px solid rgba(201, 168, 124, 0.14);
-    color: var(--color-foreground);
+    background: #0A0A0A;
+    color: #ffffff;
     display: grid;
     grid-template-columns: var(--content-grid);
     margin-top: 6rem;
@@ -93,14 +92,14 @@
     text-decoration: none;
   }
 
-  /* Brand — large editorial serif */
+  /* Brand — bold Poppins in baby pink */
   .site-footer__brand a {
     color: var(--color-accent);
     display: block;
     font-family: var(--font-secondary--family);
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
-    font-weight: 400;
-    letter-spacing: 0.28em;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: 0.2em;
     line-height: 1;
     text-transform: uppercase;
     transition: opacity 200ms ease;
@@ -111,9 +110,9 @@
   }
 
   .site-footer__brand p {
-    color: rgba(242, 232, 220, 0.45);
-    font-size: 0.82rem;
-    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.86rem;
+    letter-spacing: 0.02em;
     line-height: 1.7;
     margin-top: 1.1rem;
     max-width: 25rem;
@@ -127,10 +126,11 @@
   }
 
   .site-footer__links a {
-    color: rgba(242, 232, 220, 0.55);
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.65);
+    font-family: var(--font-secondary--family);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
     padding: 0.2rem 0;
     position: relative;
     text-transform: uppercase;
@@ -152,7 +152,7 @@
   }
 
   .site-footer__links a:hover {
-    color: var(--color-foreground);
+    color: #ffffff;
   }
 
   .site-footer__links a:hover::after {
@@ -162,18 +162,16 @@
 
   /* Newsletter */
   .site-footer__newsletter {
-    background: rgba(201, 168, 124, 0.04);
-    border: 1px solid rgba(201, 168, 124, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(247, 168, 196, 0.25);
     display: grid;
     gap: 1rem;
     padding: 1.75rem;
   }
 
   .site-footer__newsletter h2 {
-    font-family: var(--font-secondary--family);
-    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
-    font-weight: 400;
-    letter-spacing: 0.06em;
+    font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+    letter-spacing: 0.02em;
     line-height: 1.1;
     text-transform: uppercase;
   }
@@ -185,17 +183,17 @@
   }
 
   .site-footer__newsletter input[type='email'] {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(201, 168, 124, 0.18);
-    color: var(--color-foreground);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
   }
 
   .site-footer__newsletter input[type='email']::placeholder {
-    color: rgba(242, 232, 220, 0.35);
+    color: rgba(255, 255, 255, 0.4);
   }
 
   .site-footer__newsletter button {
-    letter-spacing: 0.18em;
+    letter-spacing: 0.16em;
   }
 
   /* Markets */
@@ -216,25 +214,25 @@
   }
 
   .site-footer__localization label {
-    color: rgba(242, 232, 220, 0.4);
-    font-family: var(--font-primary--family);
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: var(--font-secondary--family);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
   }
 
   .site-footer__localization select {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(201, 168, 124, 0.14);
-    color: rgba(242, 232, 220, 0.7);
-    font-size: 0.82rem;
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.84rem;
   }
 
   /* Bottom bar */
   .site-footer__bottom {
     align-items: center;
-    border-top: 1px solid rgba(201, 168, 124, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -252,14 +250,13 @@
   }
 
   .site-footer__payment svg {
-    filter: brightness(0) invert(0.65);
-    width: 2rem;
+    width: 2.1rem;
   }
 
   .site-footer__copyright {
-    color: rgba(242, 232, 220, 0.3);
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
