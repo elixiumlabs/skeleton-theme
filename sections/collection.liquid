@@ -125,17 +125,23 @@
 
 {% stylesheet %}
   .collection-page {
-    padding-block: 3rem 4rem;
+    padding-block: 4rem 5rem;
   }
 
   .collection-page__header {
-    border-bottom: 1px solid var(--color-border);
+    background:
+      linear-gradient(135deg, rgba(255, 143, 189, 0.16), rgba(255, 255, 255, 0.82)),
+      #ffffff;
+    border: 1px solid rgba(255, 143, 189, 0.28);
+    border-radius: 8px;
+    box-shadow: 0 1.5rem 4rem rgba(76, 15, 43, 0.08);
     margin-bottom: 2rem;
-    padding-bottom: 2rem;
+    padding: clamp(1.4rem, 4vw, 2.4rem);
   }
 
   .collection-page h1 {
-    font-size: clamp(2.6rem, 6vw, 6rem);
+    font-size: clamp(3rem, 7vw, 7rem);
+    line-height: 0.92;
     margin-top: 0.7rem;
     text-transform: uppercase;
   }
@@ -148,13 +154,16 @@
 
   .collection-toolbar {
     align-items: end;
-    border-bottom: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, 0.68);
+    border: 1px solid rgba(255, 143, 189, 0.24);
+    border-radius: 8px;
+    box-shadow: 0 1rem 3rem rgba(76, 15, 43, 0.06);
     display: flex;
     flex-wrap: wrap;
     gap: 0.85rem;
     justify-content: space-between;
     margin-bottom: 2rem;
-    padding-bottom: 1rem;
+    padding: 1rem;
   }
 
   .collection-toolbar__filters {
@@ -170,7 +179,9 @@
 
   .collection-filter summary,
   .collection-sort span {
-    border: 1px solid var(--color-border);
+    background: #ffffff;
+    border: 1px solid rgba(255, 143, 189, 0.34);
+    border-radius: 999px;
     cursor: pointer;
     display: inline-flex;
     font-family: var(--font-secondary--family);
@@ -188,8 +199,9 @@
 
   .collection-filter__values {
     background: #ffffff;
-    border: 1px solid var(--color-border);
-    box-shadow: 0 1.25rem 3rem rgba(8, 6, 7, 0.14);
+    border: 1px solid rgba(255, 143, 189, 0.34);
+    border-radius: 8px;
+    box-shadow: 0 1.25rem 3rem rgba(76, 15, 43, 0.14);
     display: grid;
     gap: 0.7rem;
     left: 0;
@@ -225,7 +237,10 @@
   }
 
   .collection-page__empty {
-    background: var(--color-accent-soft);
+    background:
+      linear-gradient(135deg, rgba(255, 143, 189, 0.22), rgba(255, 255, 255, 0.82)),
+      var(--color-accent-soft);
+    border-radius: 8px;
     grid-column: 1 / -1;
     padding: 3rem;
   }
