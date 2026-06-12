@@ -66,20 +66,25 @@
 {% stylesheet %}
   .site-header {
     align-items: center;
-    border-bottom: 1px solid var(--color-border);
+    backdrop-filter: blur(18px);
+    background: color-mix(in srgb, #ffffff 78%, transparent);
+    border: 1px solid rgba(255, 143, 189, 0.24);
+    border-radius: 999px;
+    box-shadow: 0 1rem 3rem rgba(76, 15, 43, 0.08);
     display: flex;
     gap: 1.25rem;
-    min-height: 5rem;
-    padding-block: 1rem;
+    margin-block: 1rem;
+    min-height: 4.45rem;
+    padding: 0.75rem 1rem 0.75rem 1.2rem;
     position: sticky;
-    top: 0;
-    z-index: 2;
+    top: 0.75rem;
+    z-index: 20;
   }
 
   .site-header__brand {
     color: var(--color-foreground);
     font-family: var(--font-secondary--family);
-    font-size: clamp(1rem, 2vw, 1.35rem);
+    font-size: clamp(1rem, 2vw, 1.45rem);
     font-weight: 700;
     letter-spacing: 0;
     line-height: 1;
@@ -91,7 +96,7 @@
   }
 
   .site-header__brand::after {
-    background: var(--color-accent);
+    background: linear-gradient(90deg, #ff8fbd, #080607);
     content: '';
     display: block;
     height: 2px;
@@ -119,6 +124,7 @@
   .site-header__menu a {
     font-size: 0.8rem;
     font-weight: 700;
+    padding: 0.45rem 0.2rem;
     text-transform: uppercase;
   }
 
@@ -179,8 +185,9 @@
   .site-header__search form,
   .cart-drawer__panel {
     background: #ffffff;
-    border: 1px solid var(--color-border);
-    box-shadow: 0 1.5rem 4rem rgba(8, 6, 7, 0.16);
+    border: 1px solid rgba(255, 143, 189, 0.32);
+    border-radius: 8px;
+    box-shadow: 0 1.5rem 4rem rgba(76, 15, 43, 0.18);
     position: absolute;
     z-index: 10;
   }
@@ -220,7 +227,10 @@
 
   .site-header__promo {
     align-content: end;
-    background: var(--color-foreground);
+    background:
+      linear-gradient(145deg, rgba(255, 143, 189, 0.32), rgba(255, 255, 255, 0.04)),
+      var(--color-foreground);
+    border-radius: 8px;
     color: #ffffff;
     display: grid;
     min-height: 11rem;
@@ -348,6 +358,7 @@
   @media (max-width: 760px) {
     .site-header {
       flex-wrap: wrap;
+      border-radius: 8px;
     }
 
     .site-header__menu {

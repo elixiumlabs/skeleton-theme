@@ -241,12 +241,12 @@
     display: grid;
     gap: clamp(2rem, 5vw, 4rem);
     grid-template-columns: minmax(0, 1.1fr) minmax(22rem, 0.9fr);
-    padding-block: 3rem 4rem;
+    padding-block: 4rem 5rem;
   }
 
   .product-detail__media {
     display: grid;
-    gap: 1rem;
+    gap: 1.2rem;
   }
 
   .product-detail__image,
@@ -255,8 +255,12 @@
   .product-detail__model {
     aspect-ratio: 4 / 5;
     background: var(--color-accent-soft);
+    border: 1px solid rgba(255, 143, 189, 0.28);
+    border-radius: 8px;
+    box-shadow: 0 1.4rem 3.5rem rgba(76, 15, 43, 0.1);
     height: auto;
     object-fit: cover;
+    overflow: hidden;
     transition: transform 260ms ease;
     width: 100%;
   }
@@ -278,20 +282,26 @@
   }
 
   .product-detail__info {
-    border-block: 1px solid var(--color-border);
-    padding-block: 2rem;
+    background:
+      linear-gradient(145deg, rgba(255, 143, 189, 0.16), rgba(255, 255, 255, 0.88)),
+      #ffffff;
+    border: 1px solid rgba(255, 143, 189, 0.3);
+    border-radius: 8px;
+    box-shadow: 0 1.5rem 4rem rgba(76, 15, 43, 0.1);
+    padding: clamp(1.3rem, 3vw, 2rem);
     position: sticky;
-    top: 1rem;
+    top: 6.5rem;
   }
 
   .product-detail h1 {
-    font-size: clamp(2.35rem, 5vw, 5.25rem);
+    font-size: clamp(2.7rem, 5vw, 5.8rem);
+    line-height: 0.95;
     margin-top: 0.75rem;
     text-transform: uppercase;
   }
 
   .product-detail__price {
-    color: var(--color-accent);
+    color: #c71767;
     font-size: 1.4rem;
     margin-top: 1rem;
   }
@@ -322,11 +332,13 @@
   }
 
   .product-detail__badges span {
-    background: var(--color-accent-soft);
+    background: var(--color-accent);
+    border-radius: 999px;
+    color: var(--color-accent-foreground);
     font-family: var(--font-secondary--family);
     font-size: 0.72rem;
     font-weight: 700;
-    padding: 0.48rem 0.65rem;
+    padding: 0.52rem 0.74rem;
     text-transform: uppercase;
   }
 
@@ -351,12 +363,14 @@
   }
 
   .product-detail__form .shopify-payment-button__button {
-    border-radius: 2px;
+    border-radius: 999px;
     min-height: 3rem;
   }
 
   .product-detail__selling-plans {
-    border: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, 0.68);
+    border: 1px solid rgba(255, 143, 189, 0.28);
+    border-radius: 8px;
     display: grid;
     gap: 0.7rem;
     padding: 1rem;
@@ -387,6 +401,7 @@
     background: var(--color-accent);
     border: 1px solid var(--color-border);
     border-radius: 999px;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.86);
     height: 1.2rem;
     width: 1.2rem;
   }
@@ -394,7 +409,7 @@
   .product-detail__pickup,
   .product-detail__restock,
   .product-detail__accordions {
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid rgba(255, 143, 189, 0.28);
     margin-top: 1.5rem;
     padding-top: 1.5rem;
   }

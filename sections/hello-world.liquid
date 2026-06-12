@@ -25,7 +25,7 @@
     {% else %}
       <img
         class="lash-hero__image"
-        src="{{ 'lash-candii-hero.png' | asset_url }}"
+        src="{{ 'lash-candii-hero-gloss.png' | asset_url }}"
         alt="{{ section.settings.heading | escape }}"
         width="1792"
         height="1024"
@@ -49,6 +49,13 @@
         </a>
       </div>
     </div>
+  </div>
+
+  <div class="lash-moodbar" aria-label="Brand highlights">
+    <span>Gloss finish</span>
+    <span>Baby-pink energy</span>
+    <span>After-dark volume</span>
+    <span>Soft glam daily</span>
   </div>
 
   <div class="lash-home__intro">
@@ -102,7 +109,9 @@
 
 {% stylesheet %}
   .lash-home {
-    background: var(--color-background);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0) 0, #fff7fb 42rem),
+      var(--color-background);
     display: grid;
     grid-template-columns: var(--content-grid);
   }
@@ -112,11 +121,11 @@
   }
 
   .lash-hero {
-    background: #080607;
-    color: #ffffff;
+    background: #fff1f8;
+    color: var(--color-foreground);
     display: grid;
     grid-column: 1 / -1;
-    min-height: clamp(36rem, 78svh, 52rem);
+    min-height: clamp(38rem, 82svh, 54rem);
     overflow: hidden;
     position: relative;
   }
@@ -136,29 +145,30 @@
 
   .lash-hero__overlay {
     background:
-      linear-gradient(90deg, rgba(8, 6, 7, 0.92) 0%, rgba(8, 6, 7, 0.72) 34%, rgba(8, 6, 7, 0.08) 70%),
-      linear-gradient(0deg, rgba(8, 6, 7, 0.36), rgba(8, 6, 7, 0));
+      linear-gradient(90deg, rgba(255, 247, 251, 0.96) 0%, rgba(255, 235, 246, 0.78) 34%, rgba(255, 247, 251, 0.18) 62%),
+      linear-gradient(0deg, rgba(255, 247, 251, 0.25), rgba(255, 247, 251, 0));
   }
 
   .lash-hero__content {
     align-content: center;
     display: grid;
-    gap: 1.25rem;
-    max-width: min(43rem, calc(100% - var(--page-margin) * 2));
+    gap: 1.15rem;
+    max-width: min(46rem, calc(100% - var(--page-margin) * 2));
     padding: 5rem var(--page-margin);
     width: 100%;
   }
 
   .lash-hero h1 {
-    font-size: clamp(3.1rem, 8vw, 7.5rem);
-    max-width: 8ch;
+    font-size: clamp(3.5rem, 8.5vw, 8.8rem);
+    line-height: 0.9;
+    max-width: 7ch;
     text-transform: uppercase;
   }
 
   .lash-hero__content > p:not(.eyebrow) {
-    color: color-mix(in srgb, #ffffff 78%, transparent);
-    font-size: 1.05rem;
-    max-width: 34rem;
+    color: color-mix(in srgb, var(--color-foreground) 68%, var(--color-background));
+    font-size: 1.08rem;
+    max-width: 31rem;
   }
 
   .lash-hero__actions {
@@ -168,22 +178,49 @@
     margin-top: 0.75rem;
   }
 
+  .lash-moodbar {
+    background: #080607;
+    color: #ffffff;
+    display: grid;
+    font-family: var(--font-secondary--family);
+    font-size: clamp(1.05rem, 2vw, 1.65rem);
+    font-weight: 700;
+    gap: 1px;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    text-transform: uppercase;
+  }
+
+  .lash-moodbar span {
+    align-items: center;
+    background:
+      linear-gradient(135deg, rgba(255, 143, 189, 0.22), rgba(255, 255, 255, 0.02)),
+      #080607;
+    display: flex;
+    min-height: 7rem;
+    padding: 1.2rem var(--page-margin);
+  }
+
+  .lash-moodbar span:nth-child(even) {
+    color: var(--color-accent);
+  }
+
   .lash-home__intro {
-    margin-block: 5rem 2rem;
-    max-width: 48rem;
+    margin-block: 5rem 2.25rem;
+    max-width: 54rem;
   }
 
   .lash-home__intro h2,
   .lash-ritual h2 {
-    font-size: clamp(2rem, 4vw, 4rem);
+    font-size: clamp(2.25rem, 5vw, 5.25rem);
     margin-top: 0.65rem;
     text-transform: uppercase;
   }
 
   .lash-home__intro > p:not(.eyebrow) {
-    color: var(--color-muted);
+    color: color-mix(in srgb, var(--color-foreground) 66%, var(--color-background));
     margin-top: 1rem;
-    max-width: 40rem;
+    max-width: 43rem;
   }
 
   .lash-products {
@@ -248,12 +285,17 @@
 
   .lash-ritual {
     align-items: start;
-    border-block: 1px solid var(--color-border);
+    background:
+      linear-gradient(135deg, rgba(255, 143, 189, 0.18), rgba(255, 255, 255, 0.78)),
+      #ffffff;
+    border: 1px solid rgba(255, 143, 189, 0.28);
+    border-radius: 8px;
+    box-shadow: 0 1.5rem 4rem rgba(76, 15, 43, 0.08);
     display: grid;
     gap: 2rem;
     grid-template-columns: minmax(16rem, 0.75fr) 1fr;
     margin-top: 5rem;
-    padding-block: 3rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
   }
 
   .lash-ritual__steps {
@@ -263,13 +305,15 @@
   }
 
   .lash-ritual__steps div {
-    background: color-mix(in srgb, var(--color-accent-soft) 64%, #ffffff);
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 143, 189, 0.22);
+    border-radius: 8px;
     min-height: 11rem;
     padding: 1.25rem;
   }
 
   .lash-ritual__steps span {
-    color: var(--color-accent);
+    color: #c71767;
     font-family: var(--font-secondary--family);
     font-size: 0.78rem;
     font-weight: 700;
@@ -295,11 +339,11 @@
     }
 
     .lash-hero__image {
-      object-position: 62% center;
+      object-position: 70% center;
     }
 
     .lash-hero__overlay {
-      background: linear-gradient(180deg, rgba(8, 6, 7, 0.9), rgba(8, 6, 7, 0.56) 55%, rgba(8, 6, 7, 0.16));
+      background: linear-gradient(180deg, rgba(255, 247, 251, 0.96), rgba(255, 235, 246, 0.78) 50%, rgba(255, 247, 251, 0.16));
     }
 
     .lash-hero__content {
@@ -309,6 +353,14 @@
 
     .lash-hero h1 {
       font-size: 3.35rem;
+    }
+
+    .lash-moodbar {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .lash-moodbar span {
+      min-height: 5.5rem;
     }
 
     .lash-ritual__steps {
@@ -330,7 +382,7 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Hero eyebrow",
-      "default": "Luxury lash essentials"
+      "default": "Gloss-drip lash studio"
     },
     {
       "type": "text",
@@ -342,7 +394,7 @@
       "type": "textarea",
       "id": "copy",
       "label": "Hero copy",
-      "default": "Featherlight strip lashes made for soft glam, clean lines, and a polished finish that photographs beautifully."
+      "default": "High-impact lashes with a glossy, girly finish: soft enough for daytime, bold enough for every main-character moment."
     },
     {
       "type": "text",
@@ -359,7 +411,7 @@
       "type": "text",
       "id": "secondary_label",
       "label": "Secondary button label",
-      "default": "Explore rituals"
+      "default": "Find your vibe"
     },
     {
       "type": "url",
@@ -375,19 +427,19 @@
       "type": "text",
       "id": "collection_eyebrow",
       "label": "Collection eyebrow",
-      "default": "The edit"
+      "default": "The glam edit"
     },
     {
       "type": "text",
       "id": "collection_heading",
       "label": "Collection heading",
-      "default": "Soft drama, sculpted by hand."
+      "default": "Lashes that look expensive before you even blink."
     },
     {
       "type": "textarea",
       "id": "collection_copy",
       "label": "Collection copy",
-      "default": "Curated lash styles for lifted everyday glamour, bridal polish, and after-dark volume."
+      "default": "Curated sets for clean-girl lift, flirty pink gloss, and full-volume nights out."
     },
     {
       "type": "text",
@@ -399,7 +451,7 @@
       "type": "text",
       "id": "ritual_heading",
       "label": "Ritual heading",
-      "default": "Designed for a seamless finish."
+      "default": "Your lash routine, polished."
     },
     {
       "type": "text",

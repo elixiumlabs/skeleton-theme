@@ -70,12 +70,14 @@
 
 {% stylesheet %}
   .site-footer {
-    background: #080607;
+    background:
+      linear-gradient(135deg, rgba(255, 143, 189, 0.18), rgba(255, 255, 255, 0)),
+      #080607;
     color: #ffffff;
     display: grid;
     grid-template-columns: var(--content-grid);
     margin-top: 5rem;
-    padding: 3rem 0;
+    padding: 4rem 0 3rem;
   }
 
   .site-footer__inner {
@@ -94,7 +96,7 @@
   .site-footer__brand a {
     color: var(--color-accent);
     font-family: var(--font-secondary--family);
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: 700;
     text-transform: uppercase;
   }
@@ -116,8 +118,12 @@
   }
 
   .site-footer__newsletter {
+    background: color-mix(in srgb, #ffffff 7%, transparent);
+    border: 1px solid color-mix(in srgb, #ffffff 12%, transparent);
+    border-radius: 8px;
     display: grid;
     gap: 0.85rem;
+    padding: 1.1rem;
   }
 
   .site-footer__newsletter h2 {
@@ -164,8 +170,11 @@
   }
 
   .site-footer__links a {
+    border: 1px solid color-mix(in srgb, #ffffff 16%, transparent);
+    border-radius: 999px;
     font-size: 0.82rem;
     font-weight: 700;
+    padding: 0.55rem 0.75rem;
     text-transform: uppercase;
   }
 
@@ -202,7 +211,7 @@
       "type": "text",
       "id": "tagline",
       "label": "Tagline",
-      "default": "Soft-glam lashes with a couture finish."
+      "default": "Glossy, flirty lashes for beauty lovers who like their soft glam expensive."
     },
     {
       "type": "link_list",
@@ -220,7 +229,7 @@
       "type": "text",
       "id": "newsletter_heading",
       "label": "Newsletter heading",
-      "default": "Private drops and lash rituals"
+      "default": "Pink-room drops and private lash rituals"
     },
     {
       "type": "checkbox",

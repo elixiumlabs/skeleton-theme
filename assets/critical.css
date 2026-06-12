@@ -74,7 +74,9 @@ p:empty {
 /** Theme styles below */
 body {
   font-family: var(--font-primary--family);
-  background-color: var(--color-background);
+  background:
+    linear-gradient(180deg, #ffffff 0%, var(--color-background) 18rem),
+    var(--color-background);
   color: var(--color-foreground);
   font-style: var(--font-primary--style);
   font-weight: var(--font-primary--weight);
@@ -104,7 +106,7 @@ input[type='submit'],
   align-items: center;
   background: var(--color-foreground);
   border: 1px solid var(--color-foreground);
-  border-radius: 2px;
+  border-radius: 999px;
   color: var(--color-background);
   cursor: pointer;
   display: inline-flex;
@@ -114,7 +116,7 @@ input[type='submit'],
   justify-content: center;
   letter-spacing: 0;
   min-height: 3rem;
-  padding: 0.82rem 1.35rem;
+  padding: 0.82rem 1.55rem;
   text-decoration: none;
   text-transform: uppercase;
   transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
@@ -125,7 +127,7 @@ input[type='submit']:hover,
 .button:hover {
   background: var(--color-accent);
   border-color: var(--color-accent);
-  color: var(--color-foreground);
+  color: var(--color-accent-foreground);
   transform: translateY(-1px);
 }
 
@@ -143,8 +145,9 @@ input[type='submit']:hover,
 input:not([type='submit']),
 select,
 textarea {
-  background: var(--color-background);
+  background: rgba(255, 255, 255, 0.82);
   border: 1px solid var(--color-border);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.58);
   min-height: 3rem;
   padding: 0.75rem 0.9rem;
 }
@@ -161,9 +164,9 @@ h4 {
 }
 
 .eyebrow {
-  color: var(--color-accent);
+  color: #c71767;
   font-family: var(--font-secondary--family);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -228,22 +231,32 @@ form:has(input[predictive-search]) {
 
 .product-grid {
   display: grid;
-  gap: 1px;
+  gap: 1rem;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .product-card {
   background: #ffffff;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 143, 189, 0.28);
+  border-radius: 8px;
+  box-shadow: 0 1.4rem 3.2rem rgba(76, 15, 43, 0.08);
   display: grid;
   min-width: 0;
+  overflow: hidden;
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.product-card:hover {
+  border-color: rgba(255, 143, 189, 0.54);
+  box-shadow: 0 2rem 4.5rem rgba(76, 15, 43, 0.14);
+  transform: translateY(-3px);
 }
 
 .product-card__media {
   aspect-ratio: 4 / 5;
   background:
-    linear-gradient(145deg, rgba(244, 182, 200, 0.28), rgba(255, 255, 255, 0.82)),
-    #f7f1f3;
+    linear-gradient(145deg, rgba(255, 143, 189, 0.22), rgba(255, 255, 255, 0.9)),
+    #fff0f7;
   display: grid;
   overflow: hidden;
   position: relative;
@@ -280,14 +293,16 @@ form:has(input[predictive-search]) {
 }
 
 .product-card__badge {
-  background: var(--color-foreground);
-  color: var(--color-background);
+  background: var(--color-accent);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  color: var(--color-accent-foreground);
   font-family: var(--font-secondary--family);
   font-size: 0.68rem;
   font-weight: 700;
   inset: 0.85rem auto auto 0.85rem;
   line-height: 1;
-  padding: 0.48rem 0.6rem;
+  padding: 0.5rem 0.72rem;
   position: absolute;
   text-transform: uppercase;
   z-index: 1;
@@ -296,7 +311,7 @@ form:has(input[predictive-search]) {
 .product-card__content {
   display: grid;
   gap: 0.75rem;
-  padding: 1rem;
+  padding: 1rem 1rem 1.1rem;
 }
 
 .product-card__title {
@@ -308,7 +323,7 @@ form:has(input[predictive-search]) {
 }
 
 .product-card__content .price {
-  color: var(--color-accent);
+  color: #c71767;
   margin-top: 0.35rem;
 }
 
@@ -362,7 +377,8 @@ form:has(input[predictive-search]) {
 
 .product-card__quick-view summary {
   align-items: center;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 143, 189, 0.44);
+  border-radius: 999px;
   cursor: pointer;
   display: inline-flex;
   font-family: var(--font-secondary--family);
@@ -379,8 +395,9 @@ form:has(input[predictive-search]) {
 
 .product-card__quick-view-panel {
   background: #ffffff;
-  border: 1px solid var(--color-border);
-  box-shadow: 0 1.25rem 3rem rgba(8, 6, 7, 0.16);
+  border: 1px solid rgba(255, 143, 189, 0.36);
+  border-radius: 8px;
+  box-shadow: 0 1.5rem 4rem rgba(76, 15, 43, 0.2);
   display: grid;
   gap: 0.75rem;
   padding: 1rem;
