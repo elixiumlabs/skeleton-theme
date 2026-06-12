@@ -65,37 +65,37 @@
       {
         "type": "color",
         "id": "background_color",
-        "default": "#FFF7FB",
+        "default": "#FFFFFF",
         "label": "t:labels.background"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#080607",
+        "default": "#0A0A0A",
         "label": "t:labels.foreground"
       },
       {
         "type": "color",
         "id": "accent_color",
-        "default": "#FF8FBD",
+        "default": "#F7A8C4",
         "label": "Accent"
       },
       {
         "type": "color",
         "id": "accent_foreground_color",
-        "default": "#080607",
+        "default": "#0A0A0A",
         "label": "Accent foreground"
       },
       {
         "type": "color",
         "id": "accent_soft_color",
-        "default": "#FFE1EE",
+        "default": "#FFEFF5",
         "label": "Soft accent"
       },
       {
         "type": "color",
         "id": "accent_soft_foreground_color",
-        "default": "#080607",
+        "default": "#0A0A0A",
         "label": "Soft accent foreground"
       },
       {
@@ -106,7 +106,7 @@
         "step": 1,
         "unit": "px",
         "label": "t:labels.input_corner_radius",
-        "default": 4
+        "default": 0
       }
     ]
   }

@@ -8,14 +8,16 @@
 %}
 
 <section class="lash-home full-width">
+
+  {{- '<!-- HERO -->' -}}
   <div class="lash-hero">
     {% if hero_image != blank %}
       {{
         hero_image
-        | image_url: width: 2200
+        | image_url: width: 2400
         | image_tag:
           class: 'lash-hero__image',
-          widths: '750, 1100, 1500, 2200',
+          widths: '750, 1100, 1500, 2200, 2400',
           sizes: '100vw',
           loading: 'eager',
           fetchpriority: 'high',
@@ -35,10 +37,11 @@
     {% endif %}
 
     <div class="lash-hero__overlay"></div>
+
     <div class="lash-hero__content">
       <p class="eyebrow">{{ section.settings.eyebrow }}</p>
       <h1>{{ section.settings.heading }}</h1>
-      <p>{{ section.settings.copy }}</p>
+      <p class="lash-hero__copy">{{ section.settings.copy }}</p>
 
       <div class="lash-hero__actions">
         <a class="button" href="{{ section.settings.primary_link | default: routes.all_products_collection_url }}">
@@ -51,19 +54,44 @@
     </div>
   </div>
 
+  {{- '<!-- MARQUEE MOODBAR -->' -}}
   <div class="lash-moodbar" aria-label="Brand highlights">
-    <span>Gloss finish</span>
-    <span>Baby-pink energy</span>
-    <span>After-dark volume</span>
-    <span>Soft glam daily</span>
+    <div class="lash-moodbar__track">
+      <span>Gloss Finish</span>
+      <span class="lash-moodbar__sep" aria-hidden="true">✦</span>
+      <span>Baby-Pink Energy</span>
+      <span class="lash-moodbar__sep" aria-hidden="true">✦</span>
+      <span>After-Dark Volume</span>
+      <span class="lash-moodbar__sep" aria-hidden="true">✦</span>
+      <span>Soft Glam Daily</span>
+      <span class="lash-moodbar__sep" aria-hidden="true">✦</span>
+      <span>Luxury Lashes</span>
+      <span class="lash-moodbar__sep" aria-hidden="true">✦</span>
+      <span>Main Character</span>
+      <span class="lash-moodbar__sep" aria-hidden="true">✦</span>
+      <span aria-hidden="true">Gloss Finish</span>
+      <span class="lash-moodbar__sep" aria-hidden="true">✦</span>
+      <span aria-hidden="true">Baby-Pink Energy</span>
+      <span class="lash-moodbar__sep" aria-hidden="true">✦</span>
+      <span aria-hidden="true">After-Dark Volume</span>
+      <span class="lash-moodbar__sep" aria-hidden="true">✦</span>
+      <span aria-hidden="true">Soft Glam Daily</span>
+      <span class="lash-moodbar__sep" aria-hidden="true">✦</span>
+      <span aria-hidden="true">Luxury Lashes</span>
+      <span class="lash-moodbar__sep" aria-hidden="true">✦</span>
+      <span aria-hidden="true">Main Character</span>
+      <span class="lash-moodbar__sep" aria-hidden="true">✦</span>
+    </div>
   </div>
 
+  {{- '<!-- COLLECTION INTRO -->' -}}
   <div class="lash-home__intro">
     <p class="eyebrow">{{ section.settings.collection_eyebrow }}</p>
     <h2>{{ section.settings.collection_heading }}</h2>
     <p>{{ section.settings.collection_copy }}</p>
   </div>
 
+  {{- '<!-- FEATURED PRODUCTS -->' -}}
   <div class="lash-products product-grid">
     {% if featured_collection != blank and featured_collection.products_count > 0 %}
       {% for product in featured_collection.products limit: 4 %}
@@ -85,33 +113,38 @@
     {% endif %}
   </div>
 
+  {{- '<!-- LASH RITUAL -->' -}}
   <div class="lash-ritual">
-    <div>
+    <div class="lash-ritual__header">
       <p class="eyebrow">{{ section.settings.ritual_eyebrow }}</p>
       <h2>{{ section.settings.ritual_heading }}</h2>
     </div>
     <div class="lash-ritual__steps">
       <div>
-        <span>01</span>
+        <span class="lash-ritual__num">01</span>
         <p>{{ section.settings.ritual_step_1 }}</p>
       </div>
       <div>
-        <span>02</span>
+        <span class="lash-ritual__num">02</span>
         <p>{{ section.settings.ritual_step_2 }}</p>
       </div>
       <div>
-        <span>03</span>
+        <span class="lash-ritual__num">03</span>
         <p>{{ section.settings.ritual_step_3 }}</p>
       </div>
     </div>
   </div>
+
 </section>
 
 {% stylesheet %}
+  @keyframes lash-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
   .lash-home {
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0) 0, #fff7fb 42rem),
-      var(--color-background);
+    background: var(--color-background);
     display: grid;
     grid-template-columns: var(--content-grid);
   }
@@ -120,12 +153,12 @@
     grid-column: 2;
   }
 
+  /* ─── HERO ─── */
   .lash-hero {
-    background: #fff1f8;
     color: var(--color-foreground);
     display: grid;
     grid-column: 1 / -1;
-    min-height: clamp(38rem, 82svh, 54rem);
+    min-height: clamp(40rem, 88svh, 58rem);
     overflow: hidden;
     position: relative;
   }
@@ -143,117 +176,131 @@
     width: 100%;
   }
 
+  /* Soft bright wash so dark text reads over the image — Kylie style */
   .lash-hero__overlay {
     background:
-      linear-gradient(90deg, rgba(255, 247, 251, 0.96) 0%, rgba(255, 235, 246, 0.78) 34%, rgba(255, 247, 251, 0.18) 62%),
-      linear-gradient(0deg, rgba(255, 247, 251, 0.25), rgba(255, 247, 251, 0));
+      linear-gradient(100deg,
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(255, 239, 245, 0.82) 36%,
+        rgba(255, 239, 245, 0.28) 64%,
+        rgba(255, 255, 255, 0.04) 100%),
+      linear-gradient(0deg,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0) 35%);
   }
 
   .lash-hero__content {
     align-content: center;
     display: grid;
-    gap: 1.15rem;
-    max-width: min(46rem, calc(100% - var(--page-margin) * 2));
+    gap: 1.5rem;
+    max-width: min(54rem, calc(100% - var(--page-margin) * 2));
     padding: 5rem var(--page-margin);
     width: 100%;
   }
 
+  /* Oversized Poppins headline — the money shot */
   .lash-hero h1 {
-    font-size: clamp(3.5rem, 8.5vw, 8.8rem);
-    line-height: 0.9;
-    max-width: 7ch;
+    font-size: clamp(4rem, 10.5vw, 11rem);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 0.92;
+    max-width: 10ch;
     text-transform: uppercase;
   }
 
-  .lash-hero__content > p:not(.eyebrow) {
-    color: color-mix(in srgb, var(--color-foreground) 68%, var(--color-background));
-    font-size: 1.08rem;
-    max-width: 31rem;
+  .lash-hero__copy {
+    color: var(--color-muted);
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+    line-height: 1.7;
+    max-width: 34rem;
   }
 
   .lash-hero__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.8rem;
-    margin-top: 0.75rem;
+    gap: 0.85rem;
+    margin-top: 0.35rem;
   }
 
+  /* ─── MARQUEE MOODBAR ─── (black strip for contrast) */
   .lash-moodbar {
-    background: rgba(8, 6, 7, 0.94);
-    border-block: 1px solid rgba(255, 143, 189, 0.22);
-    color: #ffffff;
-    display: flex;
-    flex-wrap: wrap;
-    font-family: var(--font-secondary--family);
-    font-size: 0.78rem;
-    font-weight: 700;
+    background: #0A0A0A;
     grid-column: 1 / -1;
-    justify-content: center;
-    letter-spacing: 0;
-    padding: 0.65rem var(--page-margin);
-    text-transform: uppercase;
+    overflow: hidden;
+  }
+
+  .lash-moodbar__track {
+    align-items: center;
+    animation: lash-marquee 32s linear infinite;
+    display: flex;
+    width: max-content;
   }
 
   .lash-moodbar span {
-    align-items: center;
-    background: transparent;
-    display: flex;
-    min-height: 0;
-    padding: 0 0.95rem;
-    position: relative;
+    color: #ffffff;
+    font-family: var(--font-secondary--family);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    padding: 1.1rem 2rem;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
-  .lash-moodbar span + span::before {
-    background: var(--color-accent);
-    border-radius: 999px;
-    content: '';
-    height: 0.28rem;
-    left: -0.14rem;
-    position: absolute;
-    width: 0.28rem;
-  }
-
-  .lash-moodbar span:nth-child(even) {
+  .lash-moodbar__sep {
     color: var(--color-accent);
+    font-size: 0.5rem;
+    padding: 0;
   }
 
+  /* ─── COLLECTION INTRO ─── */
   .lash-home__intro {
-    margin-block: 5rem 2.25rem;
-    max-width: 54rem;
+    margin-block: 6rem 2.75rem;
+    max-width: 58rem;
   }
 
-  .lash-home__intro h2,
-  .lash-ritual h2 {
-    font-size: clamp(2.25rem, 5vw, 5.25rem);
-    margin-top: 0.65rem;
+  .lash-home__intro h2 {
+    font-size: clamp(2.4rem, 5.5vw, 5.5rem);
+    letter-spacing: 0.005em;
+    margin-top: 1.25rem;
     text-transform: uppercase;
   }
 
   .lash-home__intro > p:not(.eyebrow) {
-    color: color-mix(in srgb, var(--color-foreground) 66%, var(--color-background));
-    margin-top: 1rem;
-    max-width: 43rem;
+    color: var(--color-muted);
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+    line-height: 1.7;
+    margin-top: 1.35rem;
+    max-width: 44rem;
   }
 
+  /* ─── PRODUCT GRID (placeholder cards) ─── */
   .lash-products {
-    display: grid;
-    gap: 1px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .lash-product {
     background: #ffffff;
-    border: 1px solid var(--color-border);
+    border: 1px solid rgba(247, 168, 196, 0.3);
+    box-shadow: 0 1.2rem 2.6rem rgba(199, 23, 103, 0.06);
     color: var(--color-foreground);
     display: grid;
     min-width: 0;
     text-decoration: none;
+    transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+  }
+
+  .lash-product:hover {
+    border-color: rgba(247, 168, 196, 0.7);
+    box-shadow: 0 1.8rem 4rem rgba(199, 23, 103, 0.14);
+    transform: translateY(-4px);
   }
 
   .lash-product__media {
     aspect-ratio: 4 / 5;
-    background:
-      linear-gradient(145deg, rgba(244, 182, 200, 0.28), rgba(255, 255, 255, 0.82)),
-      #f7f1f3;
+    background: var(--color-accent-soft);
     display: block;
     overflow: hidden;
   }
@@ -261,19 +308,19 @@
   .lash-product__image {
     height: 100%;
     object-fit: cover;
-    transition: transform 260ms ease;
+    transition: transform 360ms ease;
     width: 100%;
   }
 
   .lash-product:hover .lash-product__image {
-    transform: scale(1.035);
+    transform: scale(1.045);
   }
 
   .lash-product__placeholder {
     background:
-      radial-gradient(circle at 50% 42%, rgba(8, 6, 7, 0.9) 0 0.18rem, transparent 0.2rem),
-      radial-gradient(ellipse at 50% 52%, transparent 0 3.4rem, rgba(8, 6, 7, 0.86) 3.45rem 3.55rem, transparent 3.6rem),
-      linear-gradient(145deg, rgba(244, 182, 200, 0.52), rgba(255, 255, 255, 0.82));
+      radial-gradient(circle at 50% 42%, rgba(10, 10, 10, 0.85) 0 0.18rem, transparent 0.2rem),
+      radial-gradient(ellipse at 50% 52%, transparent 0 3.4rem, rgba(10, 10, 10, 0.82) 3.45rem 3.55rem, transparent 3.6rem),
+      linear-gradient(145deg, var(--color-accent-soft), #ffffff);
     display: block;
     height: 100%;
     width: 100%;
@@ -285,98 +332,125 @@
     gap: 1rem;
     justify-content: space-between;
     min-height: 5rem;
-    padding: 1rem;
+    padding: 1.1rem 1rem;
   }
 
   .lash-product__content span:first-child {
+    color: var(--color-foreground);
     font-family: var(--font-secondary--family);
-    font-size: 0.95rem;
+    font-size: 0.78rem;
     font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
+  /* ─── RITUAL SECTION ─── */
   .lash-ritual {
     align-items: start;
-    background:
-      linear-gradient(135deg, rgba(255, 143, 189, 0.18), rgba(255, 255, 255, 0.78)),
-      #ffffff;
-    border: 1px solid rgba(255, 143, 189, 0.28);
-    border-radius: 8px;
-    box-shadow: 0 1.5rem 4rem rgba(76, 15, 43, 0.08);
+    background: linear-gradient(135deg, var(--color-accent-soft), #ffffff);
+    border: 1px solid rgba(247, 168, 196, 0.4);
     display: grid;
-    gap: 2rem;
-    grid-template-columns: minmax(16rem, 0.75fr) 1fr;
-    margin-top: 5rem;
-    padding: clamp(1.5rem, 4vw, 3rem);
+    gap: 2.5rem;
+    grid-template-columns: minmax(16rem, 0.7fr) 1fr;
+    margin-top: 6rem;
+    margin-bottom: 6rem;
+    padding: clamp(2rem, 4vw, 3.75rem);
+  }
+
+  .lash-ritual__header h2 {
+    font-size: clamp(2.2rem, 4.5vw, 4.5rem);
+    letter-spacing: 0.005em;
+    margin-top: 1.1rem;
+    text-transform: uppercase;
   }
 
   .lash-ritual__steps {
     display: grid;
-    gap: 1px;
+    gap: 1rem;
     grid-template-columns: repeat(3, 1fr);
   }
 
   .lash-ritual__steps div {
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(255, 143, 189, 0.22);
-    border-radius: 8px;
-    min-height: 11rem;
-    padding: 1.25rem;
+    background: #ffffff;
+    border: 1px solid rgba(247, 168, 196, 0.4);
+    min-height: 12rem;
+    padding: 1.5rem;
+    transition: box-shadow 220ms ease, transform 220ms ease;
   }
 
-  .lash-ritual__steps span {
-    color: #c71767;
+  .lash-ritual__steps div:hover {
+    box-shadow: 0 1.2rem 3rem rgba(199, 23, 103, 0.12);
+    transform: translateY(-3px);
+  }
+
+  .lash-ritual__num {
+    color: var(--color-rose);
+    display: block;
     font-family: var(--font-secondary--family);
-    font-size: 0.78rem;
+    font-size: 0.66rem;
     font-weight: 700;
+    letter-spacing: 0.2em;
   }
 
   .lash-ritual__steps p {
+    color: var(--color-foreground);
     font-family: var(--font-secondary--family);
-    font-size: clamp(1.1rem, 2vw, 1.55rem);
+    font-size: clamp(1.05rem, 2vw, 1.5rem);
     font-weight: 700;
-    line-height: 1.18;
-    margin-top: 1.25rem;
+    letter-spacing: 0.005em;
+    line-height: 1.2;
+    margin-top: 1.5rem;
   }
 
+  /* ─── RESPONSIVE ─── */
   @media (max-width: 990px) {
     .lash-ritual {
       grid-template-columns: 1fr;
+    }
+
+    .lash-products {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (max-width: 640px) {
     .lash-hero {
-      min-height: 42rem;
+      min-height: 44rem;
     }
 
     .lash-hero__image {
-      object-position: 70% center;
+      object-position: 65% center;
     }
 
     .lash-hero__overlay {
-      background: linear-gradient(180deg, rgba(255, 247, 251, 0.96), rgba(255, 235, 246, 0.78) 50%, rgba(255, 247, 251, 0.16));
+      background:
+        linear-gradient(180deg,
+          rgba(255, 255, 255, 0.94) 0%,
+          rgba(255, 239, 245, 0.78) 55%,
+          rgba(255, 255, 255, 0.18) 100%);
     }
 
     .lash-hero__content {
       align-content: start;
-      padding-top: 4rem;
+      padding-top: 5rem;
     }
 
     .lash-hero h1 {
-      font-size: 3.35rem;
-    }
-
-    .lash-moodbar span {
-      padding: 0.28rem 0.65rem;
-    }
-
-    .lash-moodbar span:nth-child(3)::before {
-      display: none;
+      font-size: 3.6rem;
     }
 
     .lash-ritual__steps {
       grid-template-columns: 1fr;
+    }
+
+    .lash-products {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lash-moodbar__track {
+      animation: none;
     }
   }
 {% endstylesheet %}
