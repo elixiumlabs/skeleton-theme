@@ -1,45 +1,66 @@
-<section class="promo-banner full-width">
-  <div class="promo-banner__inner">
-    <p>{{ section.settings.text }}</p>
+<section class="promo-banner full-width" aria-label="Promotions">
+  <div class="promo-banner__track">
+    <span>{{ section.settings.text }}</span>
     {% if section.settings.link_label != blank %}
+      <span class="promo-banner__sep" aria-hidden="true">✦</span>
       <a href="{{ section.settings.link | default: routes.all_products_collection_url }}">{{ section.settings.link_label }}</a>
     {% endif %}
+    <span class="promo-banner__sep" aria-hidden="true">✦</span>
+    <span aria-hidden="true">{{ section.settings.text }}</span>
+    {% if section.settings.link_label != blank %}
+      <span class="promo-banner__sep" aria-hidden="true">✦</span>
+      <a href="{{ section.settings.link | default: routes.all_products_collection_url }}" tabindex="-1" aria-hidden="true">{{ section.settings.link_label }}</a>
+    {% endif %}
+    <span class="promo-banner__sep" aria-hidden="true">✦</span>
   </div>
 </section>
 
 {% stylesheet %}
+  @keyframes promo-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
   .promo-banner {
-    background: var(--color-foreground);
-    color: #ffffff;
+    background: var(--color-accent);
+    overflow: hidden;
   }
 
-  .promo-banner__inner {
+  .promo-banner__track {
     align-items: center;
+    animation: promo-scroll 24s linear infinite;
     display: flex;
-    gap: 1rem;
-    justify-content: center;
-    min-height: 3rem;
-    padding: 0.7rem var(--page-margin);
-    text-align: center;
+    width: max-content;
   }
 
-  .promo-banner p,
+  .promo-banner span,
   .promo-banner a {
-    font-family: var(--font-secondary--family);
-    font-size: 0.78rem;
+    color: var(--color-accent-foreground);
+    font-family: var(--font-primary--family);
+    font-size: 0.62rem;
     font-weight: 700;
+    letter-spacing: 0.22em;
+    padding: 0.7rem 2rem;
+    text-decoration: none;
     text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .promo-banner a {
-    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
   }
 
-  @media (max-width: 620px) {
-    .promo-banner__inner {
-      align-items: stretch;
-      flex-direction: column;
-      gap: 0.35rem;
+  .promo-banner__sep {
+    color: rgba(11, 8, 16, 0.3);
+    font-size: 0.45rem;
+    padding: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .promo-banner__track {
+      animation: none;
     }
   }
 {% endstylesheet %}

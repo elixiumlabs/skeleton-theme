@@ -1,161 +1,193 @@
-<header class="site-header">
-  <a class="site-header__brand" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
-    <span>{{ section.settings.brand_text | default: shop.name }}</span>
-  </a>
+<header class="site-header full-width">
+  <div class="site-header__inner">
+    <a class="site-header__brand" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+      {{ section.settings.brand_text | default: shop.name }}
+    </a>
 
-  <nav class="site-header__menu" aria-label="Main menu">
-    {% for link in section.settings.menu.links %}
-      {% if link.links != blank %}
-        <details class="site-header__mega">
-          <summary>{{ link.title }}</summary>
-          <div class="site-header__mega-panel">
-            <div class="site-header__mega-links">
-              {% for child_link in link.links %}
-                <div>
-                  <a href="{{ child_link.url }}">{{ child_link.title }}</a>
-                  {% for grandchild_link in child_link.links %}
-                    <a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>
-                  {% endfor %}
-                </div>
-              {% endfor %}
+    <nav class="site-header__menu" aria-label="Main menu">
+      {% for link in section.settings.menu.links %}
+        {% if link.links != blank %}
+          <details class="site-header__mega">
+            <summary>{{ link.title }}</summary>
+            <div class="site-header__mega-panel">
+              <div class="site-header__mega-links">
+                {% for child_link in link.links %}
+                  <div>
+                    <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                    {% for grandchild_link in child_link.links %}
+                      <a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>
+                    {% endfor %}
+                  </div>
+                {% endfor %}
+              </div>
+              {% if section.settings.promo_heading != blank %}
+                <a class="site-header__promo" href="{{ section.settings.promo_link | default: routes.all_products_collection_url }}">
+                  <span>{{ section.settings.promo_heading }}</span>
+                  <small>{{ section.settings.promo_copy }}</small>
+                </a>
+              {% endif %}
             </div>
-            {% if section.settings.promo_heading != blank %}
-              <a class="site-header__promo" href="{{ section.settings.promo_link | default: routes.all_products_collection_url }}">
-                <span>{{ section.settings.promo_heading }}</span>
-                <small>{{ section.settings.promo_copy }}</small>
-              </a>
-            {% endif %}
-          </div>
-        </details>
-      {% else %}
-        {{ link.title | link_to: link.url }}
-      {% endif %}
-    {% endfor %}
-  </nav>
-
-  <div class="site-header__icons">
-    <details class="site-header__search">
-      <summary aria-label="Search">Search</summary>
-      <form action="{{ routes.search_url }}" method="get" role="search">
-        <input type="search" name="q" placeholder="{{ 'search.placeholder' | t }}" predictive-search="true">
-        <input type="hidden" name="type" value="product,article,page">
-        <input type="hidden" name="options[prefix]" value="last">
-        <button type="submit">Go</button>
-      </form>
-    </details>
-
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
-
-    <details class="cart-drawer" scroll-lock>
-      <summary aria-label="{{ 'cart.title' | t }}">
-        {% if cart.item_count > 0 %}
-          <sup aria-label="{{ cart.item_count }} items in cart">{{ cart.item_count }}</sup>
+          </details>
+        {% else %}
+          {{ link.title | link_to: link.url }}
         {% endif %}
+      {% endfor %}
+    </nav>
 
-        {{ 'icon-cart.svg' | inline_asset_content }}
-      </summary>
-      {% render 'cart-drawer' %}
-    </details>
+    <div class="site-header__icons">
+      <details class="site-header__search">
+        <summary aria-label="Search">Search</summary>
+        <form action="{{ routes.search_url }}" method="get" role="search">
+          <input type="search" name="q" placeholder="{{ 'search.placeholder' | t }}" predictive-search="true">
+          <input type="hidden" name="type" value="product,article,page">
+          <input type="hidden" name="options[prefix]" value="last">
+          <button type="submit">Search</button>
+        </form>
+      </details>
+
+      {% if shop.customer_accounts_enabled %}
+        <shopify-account menu="{{ section.settings.customer_account_menu }}">
+          {{ 'icon-account.svg' | inline_asset_content }}
+        </shopify-account>
+      {% endif %}
+
+      <details class="cart-drawer" scroll-lock>
+        <summary aria-label="{{ 'cart.title' | t }}">
+          {% if cart.item_count > 0 %}
+            <sup aria-label="{{ cart.item_count }} items in cart">{{ cart.item_count }}</sup>
+          {% endif %}
+          {{ 'icon-cart.svg' | inline_asset_content }}
+        </summary>
+        {% render 'cart-drawer' %}
+      </details>
+    </div>
   </div>
 </header>
 
 {% stylesheet %}
   .site-header {
-    align-items: center;
-    backdrop-filter: blur(18px);
-    background: color-mix(in srgb, #ffffff 78%, transparent);
-    border: 1px solid rgba(255, 143, 189, 0.24);
-    border-radius: 999px;
-    box-shadow: 0 1rem 3rem rgba(76, 15, 43, 0.08);
-    display: flex;
-    gap: 1.25rem;
-    margin-block: 1rem;
-    min-height: 4.45rem;
-    padding: 0.75rem 1rem 0.75rem 1.2rem;
+    background: var(--color-background);
+    border-bottom: 1px solid rgba(201, 168, 124, 0.12);
+    display: grid;
+    grid-template-columns: var(--content-grid);
     position: sticky;
-    top: 0.75rem;
+    top: 0;
     z-index: 20;
   }
 
+  .site-header__inner {
+    align-items: center;
+    display: flex;
+    gap: 2rem;
+    grid-column: 2;
+    min-height: 5rem;
+  }
+
+  /* Editorial serif brand mark */
   .site-header__brand {
     color: var(--color-foreground);
+    display: block;
     font-family: var(--font-secondary--family);
-    font-size: clamp(1rem, 2vw, 1.45rem);
-    font-weight: 700;
-    letter-spacing: 0;
-    line-height: 1;
+    font-size: clamp(1.05rem, 2vw, 1.45rem);
+    font-weight: 400;
+    letter-spacing: 0.35em;
     margin-right: auto;
     min-width: fit-content;
     position: relative;
     text-decoration: none;
     text-transform: uppercase;
+    transition: color 200ms ease;
   }
 
-  .site-header__brand::after {
-    background: linear-gradient(90deg, #ff8fbd, #080607);
-    content: '';
-    display: block;
-    height: 2px;
-    margin-top: 0.38rem;
-    width: 2.4rem;
+  .site-header__brand:hover {
+    color: var(--color-accent);
   }
 
   .site-header a {
+    align-items: center;
     color: var(--color-foreground);
     display: flex;
-    align-items: center;
     justify-content: center;
     position: relative;
     text-decoration: none;
   }
 
+  /* Nav */
   .site-header__menu {
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem 1.35rem;
+    gap: 0.25rem 1.8rem;
     justify-content: center;
   }
 
   .site-header__menu a {
-    font-size: 0.8rem;
-    font-weight: 700;
-    padding: 0.45rem 0.2rem;
+    color: rgba(242, 232, 220, 0.58);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    padding: 0.5rem 0;
+    position: relative;
     text-transform: uppercase;
+    transition: color 220ms ease;
+  }
+
+  .site-header__menu a::after {
+    background: var(--color-accent);
+    bottom: -1px;
+    content: '';
+    height: 1px;
+    left: 0;
+    position: absolute;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 280ms ease;
+    width: 100%;
   }
 
   .site-header__menu a:hover {
-    color: var(--color-accent);
+    color: var(--color-foreground);
   }
 
+  .site-header__menu a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Cart count badge */
   .site-header a sup,
   .site-header summary sup {
     align-items: center;
     background: var(--color-accent);
     border-radius: 999px;
-    color: var(--color-foreground);
+    color: var(--color-accent-foreground);
     display: inline-flex;
-    font-size: 0.68rem;
-    height: 1.1rem;
+    font-size: 0.58rem;
+    font-weight: 700;
+    height: 1rem;
     justify-content: center;
-    min-width: 1.1rem;
+    min-width: 1rem;
     position: absolute;
-    right: -0.45rem;
-    top: -0.45rem;
+    right: -0.5rem;
+    top: -0.5rem;
   }
 
   .site-header svg {
-    width: 1.45rem;
+    opacity: 0.7;
+    transition: opacity 200ms ease;
+    width: 1.3rem;
   }
 
+  .site-header svg:hover {
+    opacity: 1;
+  }
+
+  /* Icons group */
   .site-header__icons {
     align-items: center;
     display: flex;
-    gap: 0.9rem;
+    gap: 1.35rem;
+    margin-left: auto;
   }
 
   .site-header__icons summary {
@@ -170,24 +202,34 @@
     display: none;
   }
 
+  /* Mega menu trigger */
   .site-header__mega {
     position: relative;
   }
 
   .site-header__mega summary,
   .site-header__search summary {
-    font-size: 0.8rem;
-    font-weight: 700;
+    color: rgba(242, 232, 220, 0.58);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
+    transition: color 200ms ease;
   }
 
+  .site-header__mega summary:hover,
+  .site-header__search summary:hover {
+    color: var(--color-foreground);
+  }
+
+  /* Dropdown panels */
   .site-header__mega-panel,
   .site-header__search form,
   .cart-drawer__panel {
-    background: #ffffff;
-    border: 1px solid rgba(255, 143, 189, 0.32);
-    border-radius: 8px;
-    box-shadow: 0 1.5rem 4rem rgba(76, 15, 43, 0.18);
+    background: #120D18;
+    border: 1px solid rgba(201, 168, 124, 0.14);
+    border-radius: 0;
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.75);
     position: absolute;
     z-index: 10;
   }
@@ -197,25 +239,29 @@
     gap: 1.5rem;
     grid-template-columns: minmax(18rem, 1fr) minmax(12rem, 18rem);
     left: 50%;
-    padding: 1.25rem;
-    top: calc(100% + 1.25rem);
+    padding: 1.5rem;
+    top: calc(100% + 1.5rem);
     transform: translateX(-50%);
     width: min(48rem, calc(100vw - 2rem));
   }
 
   .site-header__mega-links {
     display: grid;
-    gap: 1rem;
+    gap: 1.25rem;
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .site-header__mega-links div {
     display: grid;
-    gap: 0.45rem;
+    gap: 0.55rem;
   }
 
   .site-header__mega-links div > a:first-child {
     color: var(--color-foreground);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
   .site-header__mega-links div > a:not(:first-child) {
@@ -223,32 +269,49 @@
     font-size: 0.78rem;
     justify-content: flex-start;
     text-transform: none;
+    transition: color 200ms ease;
   }
 
+  .site-header__mega-links div > a:hover {
+    color: var(--color-accent);
+  }
+
+  /* In-menu promo tile */
   .site-header__promo {
     align-content: end;
     background:
-      linear-gradient(145deg, rgba(255, 143, 189, 0.32), rgba(255, 255, 255, 0.04)),
-      var(--color-foreground);
-    border-radius: 8px;
-    color: #ffffff;
+      linear-gradient(145deg, rgba(201, 168, 124, 0.14), rgba(201, 168, 124, 0.02)),
+      #1E1628;
+    border: 1px solid rgba(201, 168, 124, 0.12);
+    color: var(--color-foreground);
     display: grid;
     min-height: 11rem;
-    padding: 1rem;
+    padding: 1.25rem;
+    text-decoration: none;
+    transition: border-color 200ms ease;
+  }
+
+  .site-header__promo:hover {
+    border-color: rgba(201, 168, 124, 0.3);
   }
 
   .site-header__promo span {
     color: var(--color-accent);
-    font-family: var(--font-secondary--family);
+    font-family: var(--font-primary--family);
+    font-size: 0.65rem;
     font-weight: 700;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
   }
 
   .site-header__promo small {
-    color: color-mix(in srgb, #ffffff 76%, transparent);
-    margin-top: 0.35rem;
+    color: rgba(242, 232, 220, 0.55);
+    display: block;
+    font-size: 0.78rem;
+    margin-top: 0.4rem;
   }
 
+  /* Search */
   .site-header__search {
     position: relative;
   }
@@ -258,10 +321,11 @@
     gap: 0.6rem;
     padding: 1rem;
     right: 0;
-    top: calc(100% + 1rem);
+    top: calc(100% + 1.25rem);
     width: min(22rem, calc(100vw - 2rem));
   }
 
+  /* Cart drawer */
   .cart-drawer {
     position: relative;
   }
@@ -271,35 +335,51 @@
     display: grid;
     max-height: min(42rem, calc(100vh - 7rem));
     overflow: auto;
-    padding: 1.2rem;
+    padding: 1.5rem;
     right: 0;
-    top: calc(100% + 1rem);
+    top: calc(100% + 1.25rem);
     width: min(26rem, calc(100vw - 2rem));
   }
 
   .cart-drawer__header {
     align-items: center;
+    border-bottom: 1px solid rgba(201, 168, 124, 0.1);
     display: flex;
     justify-content: space-between;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+  }
+
+  .cart-drawer__header h2 {
+    font-family: var(--font-primary--family);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
   }
 
   .cart-drawer__header button {
     background: transparent;
     border: 0;
-    color: var(--color-foreground);
+    color: var(--color-muted);
     min-height: 1.75rem;
     padding: 0.1rem 0.35rem;
+    transition: color 200ms ease;
+  }
+
+  .cart-drawer__header button:hover {
+    color: var(--color-foreground);
   }
 
   .cart-drawer__form,
   .cart-drawer__items {
     display: grid;
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   .cart-drawer__item {
     display: grid;
-    gap: 0.8rem;
+    gap: 0.9rem;
     grid-template-columns: 5rem minmax(0, 1fr);
   }
 
@@ -310,21 +390,29 @@
   }
 
   .cart-drawer__item a:first-child {
-    font-family: var(--font-secondary--family);
-    font-weight: 700;
+    color: var(--color-foreground);
+    font-family: var(--font-primary--family);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
     text-decoration: none;
     text-transform: uppercase;
+    transition: color 200ms ease;
+  }
+
+  .cart-drawer__item a:first-child:hover {
+    color: var(--color-accent);
   }
 
   .cart-drawer__item p,
   .cart-drawer__item a:last-child {
     color: var(--color-muted);
-    font-size: 0.84rem;
+    font-size: 0.8rem;
   }
 
   .cart-drawer__discounts {
     color: var(--color-accent);
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     list-style: none;
     margin-top: 0.4rem;
     padding: 0;
@@ -332,7 +420,7 @@
 
   .cart-drawer__summary {
     align-items: center;
-    border-block: 1px solid var(--color-border);
+    border-block: 1px solid rgba(201, 168, 124, 0.1);
     display: flex;
     justify-content: space-between;
     padding-block: 1rem;
@@ -341,30 +429,48 @@
   .cart-drawer__form input[name='checkout'] {
     background: var(--color-accent);
     border-color: var(--color-accent);
-    color: var(--color-foreground);
+    color: var(--color-accent-foreground);
+    letter-spacing: 0.2em;
   }
 
   .cart-drawer__empty {
     display: grid;
     gap: 1rem;
-    padding-block: 1rem;
+    padding-block: 1.5rem;
   }
 
   .cart-drawer__empty h2 {
-    font-size: 1.35rem;
+    font-family: var(--font-secondary--family);
+    font-size: 1.6rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
   @media (max-width: 760px) {
-    .site-header {
+    .site-header__inner {
       flex-wrap: wrap;
-      border-radius: 8px;
+      gap: 0.6rem;
+      min-height: 4.5rem;
+      padding-block: 0.75rem;
+    }
+
+    .site-header__brand {
+      margin-right: 0;
+    }
+
+    .site-header__icons {
+      margin-left: auto;
     }
 
     .site-header__menu {
+      border-top: 1px solid rgba(201, 168, 124, 0.08);
       flex-basis: 100%;
+      gap: 0.25rem 1.4rem;
       justify-content: flex-start;
       order: 3;
+      padding-top: 0.65rem;
+      padding-bottom: 0.5rem;
     }
 
     .site-header__mega-panel {

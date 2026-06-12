@@ -23,7 +23,7 @@
       {
         "type": "font_picker",
         "id": "type_secondary_font",
-        "default": "poppins_n4",
+        "default": "cormorant_garamond_n4",
         "label": "Secondary"
       }
     ]
@@ -65,37 +65,37 @@
       {
         "type": "color",
         "id": "background_color",
-        "default": "#FFF7FB",
+        "default": "#0B0810",
         "label": "t:labels.background"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#080607",
+        "default": "#F2E8DC",
         "label": "t:labels.foreground"
       },
       {
         "type": "color",
         "id": "accent_color",
-        "default": "#FF8FBD",
+        "default": "#C9A87C",
         "label": "Accent"
       },
       {
         "type": "color",
         "id": "accent_foreground_color",
-        "default": "#080607",
+        "default": "#0B0810",
         "label": "Accent foreground"
       },
       {
         "type": "color",
         "id": "accent_soft_color",
-        "default": "#FFE1EE",
+        "default": "#3A1424",
         "label": "Soft accent"
       },
       {
         "type": "color",
         "id": "accent_soft_foreground_color",
-        "default": "#080607",
+        "default": "#F2E8DC",
         "label": "Soft accent foreground"
       },
       {
@@ -106,7 +106,7 @@
         "step": 1,
         "unit": "px",
         "label": "t:labels.input_corner_radius",
-        "default": 4
+        "default": 0
       }
     ]
   }

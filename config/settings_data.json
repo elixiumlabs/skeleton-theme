@@ -10,30 +10,30 @@
 {
   "current": {
     "type_primary_font": "montserrat_n4",
-    "type_secondary_font": "poppins_n4",
+    "type_secondary_font": "cormorant_garamond_n4",
     "max_page_width": "90rem",
     "min_page_margin": 20,
-    "background_color": "#FFF7FB",
-    "foreground_color": "#080607",
-    "accent_color": "#FF8FBD",
-    "accent_foreground_color": "#080607",
-    "accent_soft_color": "#FFE1EE",
-    "accent_soft_foreground_color": "#080607",
-    "input_corner_radius": 4
+    "background_color": "#0B0810",
+    "foreground_color": "#F2E8DC",
+    "accent_color": "#C9A87C",
+    "accent_foreground_color": "#0B0810",
+    "accent_soft_color": "#3A1424",
+    "accent_soft_foreground_color": "#F2E8DC",
+    "input_corner_radius": 0
   },
   "presets": {
     "Lash Candii": {
       "type_primary_font": "montserrat_n4",
-      "type_secondary_font": "poppins_n4",
+      "type_secondary_font": "cormorant_garamond_n4",
       "max_page_width": "90rem",
       "min_page_margin": 20,
-      "background_color": "#FFF7FB",
-      "foreground_color": "#080607",
-      "accent_color": "#FF8FBD",
-      "accent_foreground_color": "#080607",
-      "accent_soft_color": "#FFE1EE",
-      "accent_soft_foreground_color": "#080607",
-      "input_corner_radius": 4
+      "background_color": "#0B0810",
+      "foreground_color": "#F2E8DC",
+      "accent_color": "#C9A87C",
+      "accent_foreground_color": "#0B0810",
+      "accent_soft_color": "#3A1424",
+      "accent_soft_foreground_color": "#F2E8DC",
+      "input_corner_radius": 0
     }
   }
 }
