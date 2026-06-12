@@ -179,26 +179,38 @@
   }
 
   .lash-moodbar {
-    background: #080607;
+    background: rgba(8, 6, 7, 0.94);
+    border-block: 1px solid rgba(255, 143, 189, 0.22);
     color: #ffffff;
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     font-family: var(--font-secondary--family);
-    font-size: clamp(1.05rem, 2vw, 1.65rem);
+    font-size: 0.78rem;
     font-weight: 700;
-    gap: 1px;
     grid-column: 1 / -1;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    justify-content: center;
+    letter-spacing: 0;
+    padding: 0.65rem var(--page-margin);
     text-transform: uppercase;
   }
 
   .lash-moodbar span {
     align-items: center;
-    background:
-      linear-gradient(135deg, rgba(255, 143, 189, 0.22), rgba(255, 255, 255, 0.02)),
-      #080607;
+    background: transparent;
     display: flex;
-    min-height: 7rem;
-    padding: 1.2rem var(--page-margin);
+    min-height: 0;
+    padding: 0 0.95rem;
+    position: relative;
+  }
+
+  .lash-moodbar span + span::before {
+    background: var(--color-accent);
+    border-radius: 999px;
+    content: '';
+    height: 0.28rem;
+    left: -0.14rem;
+    position: absolute;
+    width: 0.28rem;
   }
 
   .lash-moodbar span:nth-child(even) {
@@ -355,12 +367,12 @@
       font-size: 3.35rem;
     }
 
-    .lash-moodbar {
-      grid-template-columns: 1fr 1fr;
+    .lash-moodbar span {
+      padding: 0.28rem 0.65rem;
     }
 
-    .lash-moodbar span {
-      min-height: 5.5rem;
+    .lash-moodbar span:nth-child(3)::before {
+      display: none;
     }
 
     .lash-ritual__steps {
